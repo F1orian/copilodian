@@ -5,6 +5,7 @@ import type {
   ProviderCommandLoaderContext,
 } from '@/core/providers/types';
 import type { SlashCommand } from '@/core/types';
+import { t } from '@/i18n/i18n';
 
 import { filterCopilotCommands } from '../commands/CopilotCommandCatalog';
 import { getCopilotProviderSettings } from '../settings';
@@ -28,10 +29,10 @@ export class CopilotCommandLoader implements ProviderCommandLoader {
     return loadRuntimeCommands({
       allowIsolatedMetadataCreation: context.allowIsolatedMetadataCreation,
       discover: async signal => (await this.metadataProbe.load(signal)).commands,
-      errorMessage: 'Could not load Copilot commands.',
+      errorMessage: t('chat.copilot.commandsLoadFailed'),
       projectItems: commands => filterCopilotCommands(commands),
       readyCommandSnapshot: context.readyCommandSnapshot,
-      requiresSessionMessage: 'Copilot command metadata has not been loaded for this tab.',
+      requiresSessionMessage: t('chat.copilot.commandsNotLoaded'),
       signal: context.signal,
     });
   }

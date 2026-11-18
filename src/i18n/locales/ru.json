@@ -750,6 +750,13 @@
         "discard": "Отменить",
         "emptyHint": "Agents заполняют этот файл по ходу работы над проектом."
       }
+    },
+    "copilot": {
+      "signInHint": "Войдите, выполнив `copilot login` в терминале, или настройте поставщика моделей для Copilot.",
+      "allowListUnsupported": "GitHub Copilot не поддерживает точные списки разрешённых инструментов.",
+      "commandsLoadFailed": "Не удалось загрузить команды GitHub Copilot.",
+      "commandsNotLoaded": "Метаданные команд GitHub Copilot для этой вкладки ещё не загружены.",
+      "noModels": "GitHub Copilot не сообщил о доступных моделях."
     }
   },
   "inlineEdit": {

@@ -40,6 +40,7 @@ import {
 } from '../../../core/execution';
 import type { ProviderRuntimeHost } from '../../../core/providers/ProviderRuntimeHost';
 import type { ChatMessage, SlashCommand } from '../../../core/types';
+import { t } from '../../../i18n/i18n';
 import { filterCopilotCommands } from '../commands/CopilotCommandCatalog';
 import {
   COPILOT_AGENT_MODE,
@@ -131,7 +132,8 @@ const PASSIVE_TOOL_INSTRUCTION = [
 
 /** Copilot answers `session/load` for an unknown id with ACP's resource-not-found error. */
 const MISSING_SESSION_PATTERN = /resource not found|session \S+ not found/i;
-const AUTHENTICATION_PATTERN = /\b401\b|unauthori[sz]ed|not (?:signed|logged) in|authenticat|\blog ?in\b|sign[ -]?in|credential/i;
+/** Copilot reports a missing or rejected sign-in as HTTP 401 / unauthorized. */
+const AUTHENTICATION_PATTERN = /\b401\b|unauthori[sz]ed|not (?:signed|logged) in/i;
 
 export class CopilotExecutionSession implements ProviderExecutionSession {
   readonly providerId = 'copilot' as const;
@@ -258,7 +260,7 @@ export class CopilotExecutionSession implements ProviderExecutionSession {
 
   async #performExecution(active: ActiveExecution): Promise<void> {
     if (active.request.toolPolicy.kind === 'allow-list') {
-      this.#failUnrecoverable(active, 'Copilot does not support exact tool allow-lists.');
+      this.#failUnrecoverable(active, t('chat.copilot.allowListUnsupported'));
       return;
     }
     let unsubscribeClose: (() => void) | undefined;
@@ -323,11 +325,18 @@ export class CopilotExecutionSession implements ProviderExecutionSession {
     const launch = instructionsDirectory
       ? { ...baseLaunch, env: { ...baseLaunch.env, ...instructionsDirectory.environment } }
       : baseLaunch;
-    const native = new CopilotNativeConnection({
-      launch,
-      requestPermission: request => this.#handlePermission(request),
-      version: this.host.clientVersion ?? '0.0.0',
-    });
+    let native: CopilotNativeConnection;
+    try {
+      native = new CopilotNativeConnection({
+        launch,
+        requestPermission: request => this.#handlePermission(request),
+        version: this.host.clientVersion ?? '0.0.0',
+      });
+    } catch (error) {
+      // The owner that would remove the directory with its process was never installed.
+      await instructionsDirectory?.dispose();
+      throw error;
+    }
     const owner: NativeOwner = {
       commandsBySession: new Map(),
       configOptions: [],
@@ -491,9 +500,8 @@ export class CopilotExecutionSession implements ProviderExecutionSession {
     if (policy === 'passive') return Promise.resolve(CANCELLED_PERMISSION);
     // Copilot titles a permission request for an MCP tool with the bare tool name.
     if (isSessionTool(request.toolCall.title?.trim() ?? '')) {
-      return Promise.resolve(this.config.sessionTools && (policy === 'provider-default' || policy === 'unrestricted')
-        ? mapACPApprovalDecision('allow', request.options)
-        : CANCELLED_PERMISSION);
+      // Claudian auto-approves its session tools; `invokeSessionTool` enforces the run's tool policy.
+      return Promise.resolve(this.config.sessionTools ? mapACPApprovalDecision('allow', request.options) : CANCELLED_PERMISSION);
     }
     // Copilot reads files without asking; anything it asks about changes something or reaches outside the vault.
     if (policy === 'read-only') {
@@ -725,7 +733,7 @@ type CopilotErrorCategory = 'authentication' | 'configuration' | 'provider-sessi
 function describeError(error: unknown, category: CopilotErrorCategory): string {
   const message = error instanceof Error ? error.message : String(error);
   return category === 'authentication'
-    ? `${message}\nSign in by running \`copilot login\` in a terminal, or configure a model provider for Copilot.`
+    ? `${message}\n${t('chat.copilot.signInHint')}`
     : message;
 }
 

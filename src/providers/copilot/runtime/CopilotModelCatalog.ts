@@ -2,6 +2,7 @@ import { getInstallationKey } from '@/core/device/InstallationKey';
 
 import type { ProviderRuntimeHost } from '../../../core/providers/ProviderRuntimeHost';
 import type { ProviderModelCatalogRefreshResult } from '../../../core/providers/types';
+import { t } from '../../../i18n/i18n';
 import type { CopilotMetadata } from '../app/CopilotMetadataProbe';
 import {
   type CopilotCatalogSnapshot,
@@ -36,7 +37,7 @@ export class CopilotModelCatalog {
     if (live?.contextKey === contextKey) return this.#persist(live.models, live.defaultModelId, contextKey, 'live', signal);
     const metadata = await this.discover(signal);
     if (metadata.models.length === 0) {
-      return { changed: false, diagnostics: 'Copilot reported no available models.' };
+      return { changed: false, diagnostics: t('chat.copilot.noModels') };
     }
     return this.#persist(metadata.models, metadata.currentModelId, contextKey, 'probe', signal);
   }

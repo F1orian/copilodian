@@ -282,6 +282,25 @@ describe('CopilotExecutionSession', () => {
     await collect(run.events);
   });
 
+  it('lets read-only work read but denies changes without asking, and still allows session tools', async () => {
+    const port = createInteractionPort();
+    const session = await createSession({ interactionPort: port, sessionTools: { list: vi.fn(), read: vi.fn(), send: vi.fn() } });
+    const run = session.execute({ ...request('edit'), toolPolicy: { kind: 'read-only' } });
+    const peer = await spawnedProcess(1);
+    await peer.waitForPrompts(1);
+    await expect(peer.requestPermission(permissionRequest('read', 'Read /etc/hosts')))
+      .resolves.toEqual({ outcome: { optionId: 'allow_once', outcome: 'selected' } });
+    await expect(peer.requestPermission(permissionRequest('edit', 'Create file'))).resolves.toEqual({ outcome: { outcome: 'cancelled' } });
+    await expect(peer.requestPermission(permissionRequest('execute', 'Run command'))).resolves.toEqual({ outcome: { outcome: 'cancelled' } });
+    await expect(peer.requestPermission(permissionRequest('other', 'claudian_list_destinations')))
+      .resolves.toEqual({ outcome: { optionId: 'allow_once', outcome: 'selected' } });
+    expect(port.requestApproval).not.toHaveBeenCalled();
+    // Read-only work keeps Copilot's own approvals on.
+    expect(peer.configValue('allow_all')).toBe('off');
+    peer.finishPrompt();
+    await collect(run.events);
+  });
+
   it('attaches Claudian session tools over MCP and approves them without asking', async () => {
     const port = createInteractionPort();
     const list = vi.fn(async () => ({ sessions: [] }));

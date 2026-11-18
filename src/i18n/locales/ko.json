@@ -750,6 +750,13 @@
         "discard": "버리기",
         "emptyHint": "프로젝트가 진행됨에 따라 Agent가 이 내용을 채워 넣습니다."
       }
+    },
+    "copilot": {
+      "signInHint": "터미널에서 `copilot login`을 실행해 로그인하거나 Copilot용 모델 공급자를 구성하세요.",
+      "allowListUnsupported": "GitHub Copilot은 정확한 도구 허용 목록을 지원하지 않습니다.",
+      "commandsLoadFailed": "GitHub Copilot 명령을 불러오지 못했습니다.",
+      "commandsNotLoaded": "이 탭의 GitHub Copilot 명령 메타데이터가 아직 로드되지 않았습니다.",
+      "noModels": "GitHub Copilot이 사용 가능한 모델을 보고하지 않았습니다."
     }
   },
   "inlineEdit": {

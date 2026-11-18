@@ -57,7 +57,8 @@ export function resolveCopilotDefaultReasoning(
   const values = model?.reasoningEfforts.map(effort => effort.value) ?? [];
   const normalized = preferred?.trim();
   if (normalized && values.includes(normalized)) return normalized;
-  return values.includes(DEFAULT_REASONING_VALUE) ? DEFAULT_REASONING_VALUE : values[values.length - 1] ?? '';
+  // Without High there is no default to choose; Copilot then keeps its own.
+  return values.includes(DEFAULT_REASONING_VALUE) ? DEFAULT_REASONING_VALUE : '';
 }
 
 /**

@@ -750,6 +750,13 @@
         "discard": "Abandonner",
         "emptyHint": "Les Agents le complètent au fil du projet."
       }
+    },
+    "copilot": {
+      "signInHint": "Connectez-vous en exécutant `copilot login` dans un terminal, ou configurez un fournisseur de modèles pour Copilot.",
+      "allowListUnsupported": "GitHub Copilot ne prend pas en charge les listes exactes d’outils autorisés.",
+      "commandsLoadFailed": "Impossible de charger les commandes GitHub Copilot.",
+      "commandsNotLoaded": "Les métadonnées des commandes GitHub Copilot n’ont pas encore été chargées pour cet onglet.",
+      "noModels": "GitHub Copilot n’a signalé aucun modèle disponible."
     }
   },
   "inlineEdit": {

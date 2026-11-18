@@ -750,6 +750,13 @@
         "discard": "放弃",
         "emptyHint": "Agent 会随着项目推进自动补充此处内容。"
       }
+    },
+    "copilot": {
+      "signInHint": "请在终端中运行 `copilot login` 登录，或为 Copilot 配置模型提供方。",
+      "allowListUnsupported": "GitHub Copilot 不支持精确的工具允许列表。",
+      "commandsLoadFailed": "无法加载 GitHub Copilot 命令。",
+      "commandsNotLoaded": "此标签页尚未加载 GitHub Copilot 命令元数据。",
+      "noModels": "GitHub Copilot 未报告任何可用模型。"
     }
   },
   "inlineEdit": {

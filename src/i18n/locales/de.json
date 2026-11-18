@@ -750,6 +750,13 @@
         "discard": "Verwerfen",
         "emptyHint": "Agents füllen dies im Laufe des Projekts aus."
       }
+    },
+    "copilot": {
+      "signInHint": "Melde dich an, indem du `copilot login` in einem Terminal ausführst, oder konfiguriere einen Modellanbieter für Copilot.",
+      "allowListUnsupported": "GitHub Copilot unterstützt keine exakten Werkzeug-Allowlists.",
+      "commandsLoadFailed": "GitHub-Copilot-Befehle konnten nicht geladen werden.",
+      "commandsNotLoaded": "Die GitHub-Copilot-Befehlsmetadaten wurden für diesen Tab noch nicht geladen.",
+      "noModels": "GitHub Copilot hat keine verfügbaren Modelle gemeldet."
     }
   },
   "inlineEdit": {
