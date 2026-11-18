@@ -336,6 +336,14 @@
         "readOnlyDesc": "Demander avant toute modification ou accès à Internet.",
         "normalDesc": "Demander avant tout accès supplémentaire.",
         "yoloDesc": "Accès illimité aux fichiers et à Internet."
+      },
+      "copilot": {
+        "ask": "Demander",
+        "askDesc": "Demander avant les modifications et les commandes",
+        "acceptEdits": "Accepter les modifications",
+        "acceptEditsDesc": "Approuver les modifications de fichiers sans demander ; demander pour les autres actions",
+        "yolo": "YOLO",
+        "yoloDesc": "Activer « allow all » de Copilot et accepter toutes les autorisations sans demander"
       }
     },
     "thinking": {
@@ -1118,6 +1126,13 @@
       },
       "listModelsFailed": "Impossible de lister les modèles Antigravity. Exécutez agy models dans un terminal pour obtenir les détails. Pour vous connecter, exécutez agy acp --login.",
       "updateReminder": "Claudian ne prend en charge que la dernière version d’agy, qui évolue rapidement. Tenez-le à jour :"
+    },
+    "copilot": {
+      "environment": {
+        "name": "Variables d’environnement GitHub Copilot",
+        "desc": "Variables d’environnement transmises uniquement à la CLI GitHub Copilot, comme COPILOT_HOME, COPILOT_GITHUB_TOKEN ou COPILOT_PROVIDER_* pour votre propre fournisseur de modèles."
+      },
+      "loginReminder": "Claudian utilise la connexion de la CLI Copilot et ne stocke jamais d’identifiants GitHub. Pour vous connecter, exécutez :"
     },
     "deepseek": {
       "installation": {

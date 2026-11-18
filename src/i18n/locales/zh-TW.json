@@ -336,6 +336,14 @@
         "readOnlyDesc": "編輯或連線至網路前先詢問。",
         "normalDesc": "需要額外存取權限前先詢問。",
         "yoloDesc": "不限制檔案和網路存取。"
+      },
+      "copilot": {
+        "ask": "詢問",
+        "askDesc": "編輯和執行命令前詢問",
+        "acceptEdits": "接受編輯",
+        "acceptEditsDesc": "無需詢問即核准檔案編輯；其他操作仍需詢問",
+        "yolo": "YOLO",
+        "yoloDesc": "開啟 Copilot allow-all，並在不詢問的情況下接受所有權限"
       }
     },
     "thinking": {
@@ -1118,6 +1126,13 @@
       },
       "listModelsFailed": "無法取得 Antigravity 模型清單。請在終端機執行 agy models 查看詳細資訊。如需登入，請執行 agy acp --login。",
       "updateReminder": "Claudian 僅支援 agy 的最新版本，且 agy 變化很快。請保持更新："
+    },
+    "copilot": {
+      "environment": {
+        "name": "GitHub Copilot 環境變數",
+        "desc": "僅傳遞給 GitHub Copilot CLI 的環境變數，例如 COPILOT_HOME、COPILOT_GITHUB_TOKEN，或用於自有模型提供者的 COPILOT_PROVIDER_*。"
+      },
+      "loginReminder": "Claudian 使用 Copilot CLI 的登入狀態，從不儲存 GitHub 憑證。如需登入，請執行："
     },
     "deepseek": {
       "installation": {

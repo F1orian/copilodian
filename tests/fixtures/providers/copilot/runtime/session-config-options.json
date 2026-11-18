@@ -1,0 +1,102 @@
+[
+  {
+    "type": "select",
+    "id": "mode",
+    "name": "Mode",
+    "category": "mode",
+    "description": "Controls how Copilot responds: a conversational agent, planning multi-step work, or autonomous autopilot.",
+    "currentValue": "https://agentclientprotocol.com/protocol/session-modes#agent",
+    "options": [
+      {
+        "value": "https://agentclientprotocol.com/protocol/session-modes#agent",
+        "name": "Agent",
+        "description": "Default agent mode for conversational interactions"
+      },
+      {
+        "value": "https://agentclientprotocol.com/protocol/session-modes#plan",
+        "name": "Plan",
+        "description": "Plan mode for creating and executing multi-step plans"
+      },
+      {
+        "value": "https://agentclientprotocol.com/protocol/session-modes#autopilot",
+        "name": "Autopilot",
+        "description": "Autonomous mode that enables allow-all and runs until task completion without user interaction (experimental)"
+      }
+    ]
+  },
+  {
+    "type": "select",
+    "id": "model",
+    "name": "Model",
+    "category": "model",
+    "description": "The AI model Copilot uses to generate responses.",
+    "currentValue": "claude-sonnet-4.6",
+    "options": [
+      {
+        "value": "auto",
+        "name": "Auto",
+        "description": "Let Copilot pick the best model",
+        "_meta": null
+      },
+      {
+        "value": "claude-sonnet-4.6",
+        "name": "claude-sonnet-4-6",
+        "description": "claude-sonnet-4-6",
+        "_meta": {
+          "copilotUsage": "1x",
+          "copilotEnablement": "enabled"
+        }
+      }
+    ]
+  },
+  {
+    "type": "select",
+    "id": "reasoning_effort",
+    "name": "Reasoning Effort",
+    "category": "thought_level",
+    "description": "How much reasoning the model performs before responding. Higher effort can improve quality at the cost of speed.",
+    "currentValue": "medium",
+    "options": [
+      {
+        "value": "low",
+        "name": "low",
+        "description": "Minimal reasoning before responding."
+      },
+      {
+        "value": "medium",
+        "name": "medium",
+        "description": "Balanced reasoning and speed."
+      },
+      {
+        "value": "high",
+        "name": "high",
+        "description": "More thorough reasoning; slower responses."
+      },
+      {
+        "value": "max",
+        "name": "max",
+        "description": "Maximum reasoning; slowest but most thorough."
+      }
+    ]
+  },
+  {
+    "type": "select",
+    "id": "allow_all",
+    "name": "Allow All",
+    "category": "permissions",
+    "description": "Controls whether Copilot prompts for approval before using tools, accessing paths, or fetching URLs.",
+    "currentValue": "off",
+    "options": [
+      {
+        "value": "on",
+        "name": "On",
+        "description": "Automatically approve all tool, path, and URL requests"
+      },
+      {
+        "value": "off",
+        "name": "Off",
+        "description": "Require approval for tool, path, and URL requests"
+      }
+    ]
+  }
+]

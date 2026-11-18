@@ -25,6 +25,8 @@ body {
   --claudian-brand-pi-rgb: 255, 255, 255;
   --claudian-brand-grok: #fff;
   --claudian-brand-grok-rgb: 255, 255, 255;
+  --claudian-brand-copilot: #fff;
+  --claudian-brand-copilot-rgb: 255, 255, 255;
   --claudian-brand-deepseek: #4D6BFE;
   --claudian-brand-antigravity: #3186FF;
   --claudian-error: #dc3545;
@@ -50,6 +52,8 @@ body.theme-light .claudian-inline-menu-layer {
   --claudian-brand-pi-rgb: 31, 31, 31;
   --claudian-brand-grok: #000;
   --claudian-brand-grok-rgb: 0, 0, 0;
+  --claudian-brand-copilot: #000;
+  --claudian-brand-copilot-rgb: 0, 0, 0;
   --claudian-selection-check: #16a34a;
 }
 
@@ -103,6 +107,16 @@ body.theme-light .claudian-inline-menu-layer {
   --claudian-brand: var(--claudian-brand-grok);
   --claudian-brand-rgb: var(--claudian-brand-grok-rgb);
   --claudian-provider-logo: var(--claudian-brand-grok);
+}
+
+.claudian-container[data-provider="copilot"],
+.claudian-inline-input-container[data-provider="copilot"],
+.claudian-inline-menu-layer[data-provider="copilot"],
+.claudian-model-provider-tab[data-provider="copilot"],
+.claudian-settings-provider-tab[data-provider="copilot"] {
+  --claudian-brand: var(--claudian-brand-copilot);
+  --claudian-brand-rgb: var(--claudian-brand-copilot-rgb);
+  --claudian-provider-logo: var(--claudian-brand-copilot);
 }
 
 .claudian-container[data-provider="antigravity"],

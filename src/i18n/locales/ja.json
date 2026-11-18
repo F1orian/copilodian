@@ -336,6 +336,14 @@
         "readOnlyDesc": "編集やインターネットアクセス前に確認。",
         "normalDesc": "追加アクセス前に確認。",
         "yoloDesc": "ファイルとインターネットへの無制限アクセス。"
+      },
+      "copilot": {
+        "ask": "確認する",
+        "askDesc": "編集やコマンドの前に確認する",
+        "acceptEdits": "編集を承認",
+        "acceptEditsDesc": "ファイル編集は確認なしで承認し、その他の操作は確認する",
+        "yolo": "YOLO",
+        "yoloDesc": "Copilot の allow-all を有効にし、すべての権限を確認なしで承認する"
       }
     },
     "thinking": {
@@ -1118,6 +1126,13 @@
       },
       "listModelsFailed": "Antigravity のモデル一覧を取得できませんでした。詳細を確認するにはターミナルで agy models を、ログインするには agy acp --login を実行してください。",
       "updateReminder": "Claudian は agy の最新リリースのみをサポートしており、agy は頻繁に変更されます。常に最新の状態に保ってください："
+    },
+    "copilot": {
+      "environment": {
+        "name": "GitHub Copilot の環境変数",
+        "desc": "GitHub Copilot CLI にのみ渡される環境変数（COPILOT_HOME、COPILOT_GITHUB_TOKEN、独自のモデルプロバイダー用の COPILOT_PROVIDER_* など）。"
+      },
+      "loginReminder": "Claudian は Copilot CLI のサインインを使用し、GitHub の認証情報を保存しません。サインインするには次を実行します:"
     },
     "deepseek": {
       "installation": {
