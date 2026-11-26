@@ -753,7 +753,6 @@
     },
     "copilot": {
       "signInHint": "ターミナルで `copilot login` を実行してサインインするか、Copilot 用のモデルプロバイダーを設定してください。",
-      "allowListUnsupported": "GitHub Copilot はツールの厳密な許可リストに対応していません。",
       "commandsLoadFailed": "GitHub Copilot のコマンドを読み込めませんでした。",
       "commandsNotLoaded": "このタブの GitHub Copilot コマンドのメタデータはまだ読み込まれていません。",
       "noModels": "GitHub Copilot から利用可能なモデルが報告されませんでした。"

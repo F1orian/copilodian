@@ -269,7 +269,7 @@ describe('CopilotExecutionSession', () => {
   ] as const)('in %s mode a %s request asks the user: %s', async (permissionMode, kind, title, asks, toolName) => {
     const port = createInteractionPort();
     port.requestApproval.mockImplementation(async (approval: ProviderApprovalInteractionRequest) => ({
-      decision: 'deny', interactionId: approval.interactionId,
+      interactionId: approval.interactionId, value: 'reject_once',
     }));
     const session = await createSession({ interactionPort: port });
     const run = session.execute(request('edit', { permissionMode }));

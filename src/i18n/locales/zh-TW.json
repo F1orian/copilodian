@@ -753,7 +753,6 @@
     },
     "copilot": {
       "signInHint": "請在終端機中執行 `copilot login` 登入，或為 Copilot 設定模型提供者。",
-      "allowListUnsupported": "GitHub Copilot 不支援精確的工具允許清單。",
       "commandsLoadFailed": "無法載入 GitHub Copilot 指令。",
       "commandsNotLoaded": "此分頁尚未載入 GitHub Copilot 指令中繼資料。",
       "noModels": "GitHub Copilot 未回報任何可用模型。"

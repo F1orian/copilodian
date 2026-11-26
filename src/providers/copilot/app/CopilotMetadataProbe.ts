@@ -2,7 +2,11 @@ import { OwnedProbeRegistry } from '@/core/providers/metadata/OwnedProbeRegistry
 import { ProviderTransitionFence } from '@/core/providers/metadata/ProviderTransitionFence';
 import type { ProviderRuntimeHost } from '@/core/providers/ProviderRuntimeHost';
 import type { SlashCommand } from '@/core/types';
-import { type ACPSessionNotification, normalizeACPAvailableCommands } from '@/providers/acp';
+import {
+  type ACPSessionNotification,
+  CANCELLED_ACP_PERMISSION_RESPONSE,
+  normalizeACPAvailableCommands,
+} from '@/providers/acp';
 
 import { COPILOT_ACP_ARGS, CopilotNativeConnection } from '../execution/CopilotNativeConnection';
 import {
@@ -76,7 +80,7 @@ export class CopilotMetadataProbe {
         ownedSignal.throwIfAborted();
         return new CopilotNativeConnection({
           launch,
-          requestPermission: async () => ({ outcome: { outcome: 'cancelled' } }),
+          requestPermission: async () => CANCELLED_ACP_PERMISSION_RESPONSE,
           version: this.host.clientVersion ?? '0.0.0',
         });
       },

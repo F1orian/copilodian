@@ -753,7 +753,6 @@
     },
     "copilot": {
       "signInHint": "Inicia sesión ejecutando `copilot login` en una terminal o configura un proveedor de modelos para Copilot.",
-      "allowListUnsupported": "GitHub Copilot no admite listas exactas de herramientas permitidas.",
       "commandsLoadFailed": "No se pudieron cargar los comandos de GitHub Copilot.",
       "commandsNotLoaded": "Los metadatos de comandos de GitHub Copilot aún no se han cargado para esta pestaña.",
       "noModels": "GitHub Copilot no informó de ningún modelo disponible."

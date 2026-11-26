@@ -21,8 +21,9 @@ import {
   type ACPRequestPermissionResponse,
   type ACPSessionConfigOption,
   type ACPSessionNotification,
+  allowACPPermission,
   buildACPUsageInfo,
-  mapACPApprovalDecision,
+  CANCELLED_ACP_PERMISSION_RESPONSE,
   normalizeACPAvailableCommands,
 } from '@/providers/acp';
 
@@ -123,7 +124,6 @@ interface NativeOwner {
 }
 
 const CANCEL_SETTLE_TIMEOUT_MS = 2_000;
-const CANCELLED_PERMISSION: ACPRequestPermissionResponse = { outcome: { outcome: 'cancelled' } };
 
 const PASSIVE_TOOL_INSTRUCTION = [
   'Do not use any tools for this request.',
@@ -259,10 +259,6 @@ export class CopilotExecutionSession implements ProviderExecutionSession {
   }
 
   async #performExecution(active: ActiveExecution): Promise<void> {
-    if (active.request.toolPolicy.kind === 'allow-list') {
-      this.#failUnrecoverable(active, t('chat.copilot.allowListUnsupported'));
-      return;
-    }
     let unsubscribeClose: (() => void) | undefined;
     try {
       if (this.cancellationFlight) await this.cancellationFlight;
@@ -417,7 +413,7 @@ export class CopilotExecutionSession implements ProviderExecutionSession {
     }
     await this.#setConfigOption(owner, active, sessionId, COPILOT_MODE_CONFIG_ID, COPILOT_AGENT_MODE);
     const allowAll = shouldAllowAllCopilotPermissions(configuration.permissionMode)
-      && (toolPolicy.kind === 'provider-default' || toolPolicy.kind === 'unrestricted');
+      && toolPolicy.kind === 'provider-default';
     await this.#setConfigOption(owner, active, sessionId, COPILOT_ALLOW_ALL_CONFIG_ID, allowAll ? 'on' : 'off');
   }
 
@@ -485,9 +481,9 @@ export class CopilotExecutionSession implements ProviderExecutionSession {
   }
 
   #handlePermission(request: ACPRequestPermissionRequest): Promise<ACPRequestPermissionResponse> {
-    if (request.sessionId !== this.providerSessionId) return Promise.resolve(CANCELLED_PERMISSION);
+    if (request.sessionId !== this.providerSessionId) return Promise.resolve(CANCELLED_ACP_PERMISSION_RESPONSE);
     const active = this.active;
-    if (!active || this.#isCancellationRequested(active)) return Promise.resolve(CANCELLED_PERMISSION);
+    if (!active || this.#isCancellationRequested(active)) return Promise.resolve(CANCELLED_ACP_PERMISSION_RESPONSE);
     return this.#decidePermission(request, approvalPolicyOf(active.request), active.abortController.signal);
   }
 
@@ -497,22 +493,23 @@ export class CopilotExecutionSession implements ProviderExecutionSession {
     signal: AbortSignal,
   ): Promise<ACPRequestPermissionResponse> {
     const policy = toolPolicy.kind;
-    if (policy === 'passive') return Promise.resolve(CANCELLED_PERMISSION);
+    if (policy === 'passive') return Promise.resolve(CANCELLED_ACP_PERMISSION_RESPONSE);
     // Copilot titles a permission request for an MCP tool with the bare tool name.
     if (isSessionTool(request.toolCall.title?.trim() ?? '')) {
       // Claudian auto-approves its session tools; `invokeSessionTool` enforces the run's tool policy.
-      return Promise.resolve(this.config.sessionTools ? mapACPApprovalDecision('allow', request.options) : CANCELLED_PERMISSION);
+      return Promise.resolve(this.config.sessionTools
+        ? allowACPPermission(request.options) : CANCELLED_ACP_PERMISSION_RESPONSE);
     }
     // Copilot reads files without asking; anything it asks about changes something or reaches outside the vault.
     if (policy === 'read-only') {
       return Promise.resolve(request.toolCall.kind === 'read'
-        ? mapACPApprovalDecision('allow', request.options) : CANCELLED_PERMISSION);
+        ? allowACPPermission(request.options) : CANCELLED_ACP_PERMISSION_RESPONSE);
     }
-    if (policy === 'unrestricted' || shouldAllowAllCopilotPermissions(permissionMode)) {
-      return Promise.resolve(mapACPApprovalDecision('allow', request.options));
+    if (shouldAllowAllCopilotPermissions(permissionMode)) {
+      return Promise.resolve(allowACPPermission(request.options));
     }
     if (shouldAutoApproveCopilotEdits(permissionMode) && request.toolCall.kind === 'edit') {
-      return Promise.resolve(mapACPApprovalDecision('allow', request.options));
+      return Promise.resolve(allowACPPermission(request.options));
     }
     return this.interactionController.requestPermission(request, signal);
   }
@@ -571,13 +568,6 @@ export class CopilotExecutionSession implements ProviderExecutionSession {
       reason: response.stopReason === 'max_tokens' ? 'max-tokens' : response.stopReason === 'end_turn' ? 'completed' : 'provider-ended',
       type: 'turn_completed',
     });
-  }
-
-  #failUnrecoverable(active: ActiveExecution, message: string): void {
-    this.#updateSnapshot('invalidated', { message, reason: 'configuration-changed', recoverable: false });
-    this.#emitCurrentSnapshot();
-    active.abortController.abort();
-    this.#endRun(active, { category: 'configuration', message, recoverable: false, type: 'execution_error' });
   }
 
   #failRecoverable(active: ActiveExecution, error: unknown): void {
