@@ -20,3 +20,16 @@ export function getBuiltInProviderDefaultConfigs(): ProviderConfigMap {
     pi: { ...DEFAULT_PI_PROVIDER_SETTINGS },
   };
 }
+
+/**
+ * The defaults this build ships: it targets GitHub Copilot, so a fresh install enables Copilot alone. Every
+ * other provider stays registered and can still be enabled in settings.
+ */
+export function getShippedProviderDefaultConfigs(): ProviderConfigMap {
+  const configs = getBuiltInProviderDefaultConfigs();
+  return {
+    ...configs,
+    claude: { ...configs.claude, enabled: false },
+    copilot: { ...configs.copilot, enabled: true },
+  };
+}

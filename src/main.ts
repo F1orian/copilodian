@@ -55,7 +55,7 @@ import { ZenModeController } from './features/chat/zen/ZenModeController';
 import { createInlineEditCommand } from './features/inline-edit/inlineEditCommand';
 import { InlineEditSessionOwner } from './features/inline-edit/InlineEditSessionOwner';
 import { ClaudianSettingTab } from './features/settings/ClaudianSettings';
-import { getBuiltInProviderDefaultConfigs } from './providers/defaultProviderConfigs';
+import { getShippedProviderDefaultConfigs } from './providers/defaultProviderConfigs';
 
 export default class ClaudianPlugin extends Plugin {
   readonly executionLifecycleRegistry = new ProviderExecutionLifecycleRegistry();
@@ -226,7 +226,7 @@ export default class ClaudianPlugin extends Plugin {
   private async loadApplication(): Promise<void> {
     const domains = await startApplication({
       plugin: this,
-      defaultSettings: createDefaultClaudianSettings(getBuiltInProviderDefaultConfigs()),
+      defaultSettings: createDefaultClaudianSettings(getShippedProviderDefaultConfigs()),
       providers: ProviderRegistry,
       providerSettings: ProviderSettingsCoordinator,
       isUnloading: () => this.isUnloading,

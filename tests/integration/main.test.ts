@@ -461,8 +461,11 @@ describe('ClaudianPlugin', () => {
       await plugin.onload();
 
       expect(plugin.settings).toBeDefined();
-      // A fresh install starts Claude on Auto, which carries to an unsaved provider as Safe.
-      expect(plugin.settings.permissionMode).toBe('auto');
+      // This build ships GitHub Copilot alone: a fresh install enables only Copilot and starts it on Ask.
+      const settings = plugin.settings as unknown as Record<string, unknown>;
+      expect(ProviderRegistry.getEnabledProviderIds(settings)).toEqual(['copilot']);
+      expect(ProviderRegistry.resolveSettingsProviderId(settings)).toBe('copilot');
+      expect(plugin.settings.permissionMode).toBe('normal');
       expect(ProviderSettingsCoordinator.getProviderSettingsSnapshot(plugin.settings, 'codex').permissionMode)
         .toBe('auto-review');
       expect(plugin.settings.hiddenCommands).toEqual(DEFAULT_SETTINGS.hiddenCommands);
@@ -1854,6 +1857,8 @@ describe('ClaudianPlugin', () => {
         },
       });
       const writeError = new Error('settings write failed');
+      // Count only the transition's writes; startup records enabled providers' runtime inputs first.
+      mockApp.vault.adapter.write.mockClear();
       mockApp.vault.adapter.write.mockRejectedValueOnce(writeError);
 
       await expect(plugin.providerHost.applyEnvironmentVariables(
