@@ -338,11 +338,8 @@
         "yoloDesc": "Accès illimité aux fichiers et à Internet."
       },
       "copilot": {
-        "ask": "Demander",
         "askDesc": "Demander avant les modifications et les commandes",
-        "acceptEdits": "Accepter les modifications",
         "acceptEditsDesc": "Approuver les modifications de fichiers sans demander ; demander pour les autres actions",
-        "yolo": "YOLO",
         "yoloDesc": "Activer « allow all » de Copilot et accepter toutes les autorisations sans demander"
       }
     },

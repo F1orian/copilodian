@@ -338,11 +338,8 @@
         "yoloDesc": "ファイルとインターネットへの無制限アクセス。"
       },
       "copilot": {
-        "ask": "確認する",
         "askDesc": "編集やコマンドの前に確認する",
-        "acceptEdits": "編集を承認",
         "acceptEditsDesc": "ファイル編集は確認なしで承認し、その他の操作は確認する",
-        "yolo": "YOLO",
         "yoloDesc": "Copilot の allow-all を有効にし、すべての権限を確認なしで承認する"
       }
     },

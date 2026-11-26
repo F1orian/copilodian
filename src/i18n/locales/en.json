@@ -338,11 +338,8 @@
         "yoloDesc": "Unrestricted files and internet."
       },
       "copilot": {
-        "ask": "Ask",
         "askDesc": "Ask before edits and commands",
-        "acceptEdits": "Accept edits",
         "acceptEditsDesc": "Approve file edits without asking; ask before other actions",
-        "yolo": "YOLO",
         "yoloDesc": "Turn on Copilot allow-all and accept every permission without asking"
       }
     },

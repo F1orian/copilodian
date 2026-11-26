@@ -1,12 +1,33 @@
-import type { ProviderPermissionModePolicy } from '../../core/providers/types';
+import {
+  buildPermissionModeOptions,
+  createPermissionModePolicy,
+  type ProviderPermissionModeDefinition,
+} from '../../core/providers/permissionModes';
+import type { ProviderPermissionModeOption } from '../../core/providers/types';
 
-export const COPILOT_PERMISSION_MODES = ['normal', 'acceptEdits', 'yolo'] as const;
+const COPILOT_PERMISSION_MODES: readonly ProviderPermissionModeDefinition[] = Object.freeze([
+  { value: 'normal', label: 'Ask', description: { key: 'chat.permissionMode.copilot.askDesc' } },
+  {
+    value: 'acceptEdits',
+    label: 'Accept edits',
+    description: { key: 'chat.permissionMode.copilot.acceptEditsDesc' },
+  },
+  {
+    value: 'yolo',
+    label: 'YOLO',
+    description: { key: 'chat.permissionMode.copilot.yoloDesc' },
+    bypassesApprovals: true,
+  },
+]);
 
-export const COPILOT_PERMISSION_MODE_POLICY: ProviderPermissionModePolicy = Object.freeze({
-  values: COPILOT_PERMISSION_MODES,
+export const COPILOT_PERMISSION_MODE_POLICY = createPermissionModePolicy(COPILOT_PERMISSION_MODES, {
   fallbackValue: 'normal',
   defaultValue: 'normal',
 });
+
+export function getCopilotPermissionModeOptions(): ProviderPermissionModeOption[] {
+  return buildPermissionModeOptions(COPILOT_PERMISSION_MODES);
+}
 
 /** YOLO turns on Copilot's session `allow_all` option, which also covers requests Claudian never sees. */
 export function shouldAllowAllCopilotPermissions(permissionMode: string | undefined): boolean {

@@ -338,11 +338,8 @@
         "yoloDesc": "不限制文件和网络访问。"
       },
       "copilot": {
-        "ask": "询问",
         "askDesc": "编辑和执行命令前询问",
-        "acceptEdits": "接受编辑",
         "acceptEditsDesc": "无需询问即批准文件编辑；其他操作仍需询问",
-        "yolo": "YOLO",
         "yoloDesc": "开启 Copilot allow-all，并在不询问的情况下接受所有权限"
       }
     },

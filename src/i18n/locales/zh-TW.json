@@ -338,11 +338,8 @@
         "yoloDesc": "不限制檔案和網路存取。"
       },
       "copilot": {
-        "ask": "詢問",
         "askDesc": "編輯和執行命令前詢問",
-        "acceptEdits": "接受編輯",
         "acceptEditsDesc": "無需詢問即核准檔案編輯；其他操作仍需詢問",
-        "yolo": "YOLO",
         "yoloDesc": "開啟 Copilot allow-all，並在不詢問的情況下接受所有權限"
       }
     },
