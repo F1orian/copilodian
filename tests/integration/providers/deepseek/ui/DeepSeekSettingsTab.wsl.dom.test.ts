@@ -77,7 +77,7 @@ it('switches to Linux WSL discovery in the vault distro, reserving Linux preset 
   const plugins = ui.getByRole('textbox', { name: 'Additional preset plugins' });
   fireEvent.change(plugins, { target: { value: '- id: tool-bash\n  name: custom-shell' } });
   expect(plugins.getAttribute('aria-invalid')).toBe('true');
-  expect(ui.getAllByRole('alert').find(alert => alert.id === plugins.getAttribute('aria-describedby'))?.textContent).toMatch(/already part of Claudian/);
+  expect(ui.getAllByRole('alert').find(alert => alert.id === plugins.getAttribute('aria-describedby'))?.textContent).toMatch(/already part of Copilodian/);
   expect(getDeepSeekProviderSettings(fixture.settings).presetPlugins).toBe('');
 
   const distro = ui.getByRole('textbox', { name: 'WSL distro override' });

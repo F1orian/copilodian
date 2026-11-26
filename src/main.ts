@@ -141,7 +141,7 @@ export default class ClaudianPlugin extends Plugin {
       });
       this.vaultContentEvents.register(eventRef => this.registerEvent(eventRef));
 
-      this.addRibbonIcon('bot', 'Open Claudian', () => {
+      this.addRibbonIcon('bot', 'Open Copilodian', () => {
         void this.views.activateView();
       });
 

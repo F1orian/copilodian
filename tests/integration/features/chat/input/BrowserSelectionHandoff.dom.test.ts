@@ -42,7 +42,7 @@ it.each([
   const sourceLeaf = { view: sourceView };
   const composer = document.body.createDiv();
   const input = composer.createEl('textarea', { attr: { 'aria-label': 'Message' } });
-  const ownLeaf = { view: { containerEl: composer, getViewType: () => 'claudian-view' } };
+  const ownLeaf = { view: { containerEl: composer, getViewType: () => 'copilodian-view' } };
   let activeLeaf: { view: { containerEl: HTMLElement; getViewType: () => string } } = sourceLeaf;
   let sourceOpen = true;
   const app = { workspace: {
@@ -67,7 +67,7 @@ it.each([
     if (action === 'other composer') {
       const otherComposer = document.body.createDiv();
       otherComposer.createEl('textarea').focus();
-      activeLeaf = { view: { containerEl: otherComposer, getViewType: () => 'claudian-view' } };
+      activeLeaf = { view: { containerEl: otherComposer, getViewType: () => 'copilodian-view' } };
     }
     if (action === 'source closed') { sourceOpen = false; source.remove(); }
     if (action === 'source replaced') sourceView.containerEl = document.body.createDiv();

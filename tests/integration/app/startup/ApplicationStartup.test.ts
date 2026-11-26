@@ -112,10 +112,10 @@ describe('startApplication', () => {
     it('should merge saved data with defaults', async () => {
       // Mock claudian-settings.json exists with custom values (Claudian-specific settings)
       mockApp.vault.adapter.exists.mockImplementation(async (path: string) => {
-        return path === '.claudian/claudian-settings.json';
+        return path === '.copilodian/copilodian-settings.json';
       });
       mockApp.vault.adapter.read.mockImplementation(async (path: string) => {
-        if (path === '.claudian/claudian-settings.json') {
+        if (path === '.copilodian/copilodian-settings.json') {
           return JSON.stringify({
             userName: 'TestUser',
           });
@@ -154,10 +154,10 @@ describe('startApplication', () => {
     it('preserves the saved model while applying environment configuration', async () => {
       // Mock claudian-settings.json with environment variables
       mockApp.vault.adapter.exists.mockImplementation(async (path: string) => {
-        return path === '.claudian/claudian-settings.json';
+        return path === '.copilodian/copilodian-settings.json';
       });
       mockApp.vault.adapter.read.mockImplementation(async (path: string) => {
-        if (path === '.claudian/claudian-settings.json') {
+        if (path === '.copilodian/copilodian-settings.json') {
           return JSON.stringify({
             providerConfigs: { claude: { environmentVariables: 'ANTHROPIC_MODEL=custom-model' } },
             lastEnvHash: '',
@@ -174,15 +174,15 @@ describe('startApplication', () => {
     });
 
     function loadSettingsFile(settingsFile: Record<string, unknown>): void {
-      mockApp.vault.adapter.exists.mockImplementation(async (path: string) => path === '.claudian/claudian-settings.json');
+      mockApp.vault.adapter.exists.mockImplementation(async (path: string) => path === '.copilodian/copilodian-settings.json');
       mockApp.vault.adapter.read.mockImplementation(async (path: string) => (
-        path === '.claudian/claudian-settings.json' ? JSON.stringify(settingsFile) : ''
+        path === '.copilodian/copilodian-settings.json' ? JSON.stringify(settingsFile) : ''
       ));
     }
 
     function lastWrittenSettings(): Record<string, unknown> | undefined {
       return mockApp.vault.adapter.write.mock.calls
-        .filter(([path]) => path === '.claudian/claudian-settings.json')
+        .filter(([path]) => path === '.copilodian/copilodian-settings.json')
         .map(([, content]) => JSON.parse(content) as Record<string, unknown>)
         .at(-1);
     }
@@ -230,7 +230,7 @@ describe('startApplication', () => {
   describe('session metadata', () => {
     it('keeps persisted Codex sessions when startup records a new runtime fingerprint', async () => {
       const timestamp = Date.now();
-      const metadataPath = '.claudian/sessions/conv-codex-legacy.meta.json';
+      const metadataPath = '.copilodian/sessions/conv-codex-legacy.meta.json';
       const sessionMetadata = {
         id: 'conv-codex-legacy',
         providerId: 'codex',
@@ -246,17 +246,17 @@ describe('startApplication', () => {
       };
 
       mockApp.vault.adapter.exists.mockImplementation(async (path: string) => (
-        path === '.claudian/claudian-settings.json'
-        || path === '.claudian/sessions'
+        path === '.copilodian/copilodian-settings.json'
+        || path === '.copilodian/sessions'
         || path === metadataPath
       ));
       mockApp.vault.adapter.list.mockImplementation(async (path: string) => (
-        path === '.claudian/sessions'
+        path === '.copilodian/sessions'
           ? { files: [metadataPath], folders: [] }
           : { files: [], folders: [] }
       ));
       mockApp.vault.adapter.read.mockImplementation(async (path: string) => {
-        if (path === '.claudian/claudian-settings.json') {
+        if (path === '.copilodian/copilodian-settings.json') {
           return JSON.stringify({
             providerConfigs: {
               codex: {
@@ -301,21 +301,21 @@ describe('startApplication', () => {
       });
 
       mockApp.vault.adapter.exists.mockImplementation(async (path: string) => {
-        return path === '.claudian/claudian-settings.json'
-          || path === '.claudian/sessions'
-          || path === '.claudian/sessions/conv-stale-1.meta.json';
+        return path === '.copilodian/copilodian-settings.json'
+          || path === '.copilodian/sessions'
+          || path === '.copilodian/sessions/conv-stale-1.meta.json';
       });
       mockApp.vault.adapter.list.mockImplementation(async (path: string) => {
-        if (path === '.claudian/sessions') {
-          return { files: ['.claudian/sessions/conv-stale-1.meta.json'], folders: [] };
+        if (path === '.copilodian/sessions') {
+          return { files: ['.copilodian/sessions/conv-stale-1.meta.json'], folders: [] };
         }
         return { files: [], folders: [] };
       });
       mockApp.vault.adapter.read.mockImplementation(async (path: string) => {
-        if (path === '.claudian/sessions/conv-stale-1.meta.json') {
+        if (path === '.copilodian/sessions/conv-stale-1.meta.json') {
           return sessionMeta;
         }
-        if (path === '.claudian/claudian-settings.json') {
+        if (path === '.copilodian/copilodian-settings.json') {
           return JSON.stringify({});
         }
         return '';
@@ -325,7 +325,7 @@ describe('startApplication', () => {
 
       expect(domains.conversations.getConversationList()).toHaveLength(1);
       expect(mockApp.vault.adapter.remove).not.toHaveBeenCalledWith(
-        '.claudian/sessions/conv-stale-1.meta.json',
+        '.copilodian/sessions/conv-stale-1.meta.json',
       );
     });
 
@@ -342,26 +342,26 @@ describe('startApplication', () => {
       // Mock files exist
       mockApp.vault.adapter.exists.mockImplementation(async (path: string) => {
         // Session files
-        if (path === '.claudian/sessions' || path === '.claudian/sessions/conv-saved-1.meta.json') {
+        if (path === '.copilodian/sessions' || path === '.copilodian/sessions/conv-saved-1.meta.json') {
           return true;
         }
         // claudian-settings.json exists
-        if (path === '.claudian/claudian-settings.json') {
+        if (path === '.copilodian/copilodian-settings.json') {
           return true;
         }
         return false;
       });
       mockApp.vault.adapter.list.mockImplementation(async (path: string) => {
-        if (path === '.claudian/sessions') {
-          return { files: ['.claudian/sessions/conv-saved-1.meta.json'], folders: [] };
+        if (path === '.copilodian/sessions') {
+          return { files: ['.copilodian/sessions/conv-saved-1.meta.json'], folders: [] };
         }
         return { files: [], folders: [] };
       });
       mockApp.vault.adapter.read.mockImplementation(async (path: string) => {
-        if (path === '.claudian/sessions/conv-saved-1.meta.json') {
+        if (path === '.copilodian/sessions/conv-saved-1.meta.json') {
           return sessionMeta;
         }
-        if (path === '.claudian/claudian-settings.json') {
+        if (path === '.copilodian/copilodian-settings.json') {
           return JSON.stringify({});
         }
         return '';
@@ -388,24 +388,24 @@ describe('startApplication', () => {
       });
 
       mockApp.vault.adapter.exists.mockImplementation(async (path: string) => {
-        return path === '.claudian/claudian-settings.json' ||
-          path === '.claudian/sessions' ||
-          path === '.claudian/sessions/conv-saved-1.meta.json';
+        return path === '.copilodian/copilodian-settings.json' ||
+          path === '.copilodian/sessions' ||
+          path === '.copilodian/sessions/conv-saved-1.meta.json';
       });
       mockApp.vault.adapter.list.mockImplementation(async (path: string) => {
-        if (path === '.claudian/sessions') {
-          return { files: ['.claudian/sessions/conv-saved-1.meta.json'], folders: [] };
+        if (path === '.copilodian/sessions') {
+          return { files: ['.copilodian/sessions/conv-saved-1.meta.json'], folders: [] };
         }
         return { files: [], folders: [] };
       });
       mockApp.vault.adapter.read.mockImplementation(async (path: string) => {
-        if (path === '.claudian/claudian-settings.json') {
+        if (path === '.copilodian/copilodian-settings.json') {
           // All these fields are now in claudian-settings.json
           return JSON.stringify({
             providerConfigs: { claude: { environmentHash: 'old-hash', environmentVariables: 'ANTHROPIC_BASE_URL=https://api.example.com' } },
           });
         }
-        if (path === '.claudian/sessions/conv-saved-1.meta.json') {
+        if (path === '.copilodian/sessions/conv-saved-1.meta.json') {
           return sessionMeta;
         }
         return '';
@@ -421,7 +421,7 @@ describe('startApplication', () => {
       expect(getClaudeProviderSettings(domains.settings.getCommittedSettings()).environmentHash).not.toBe('old-hash');
       expect(loaded?.sessionId).toBe('saved-session');
       expect(mockApp.vault.adapter.write).not.toHaveBeenCalledWith(
-        '.claudian/sessions/conv-saved-1.meta.json',
+        '.copilodian/sessions/conv-saved-1.meta.json',
         expect.any(String),
       );
     });
@@ -458,21 +458,21 @@ describe('startApplication', () => {
       });
 
       mockApp.vault.adapter.exists.mockImplementation(async (path: string) => {
-        return path === '.claudian/claudian-settings.json' ||
-          path === '.claudian/sessions' ||
-          path === '.claudian/sessions/conv-multi-session.meta.json';
+        return path === '.copilodian/copilodian-settings.json' ||
+          path === '.copilodian/sessions' ||
+          path === '.copilodian/sessions/conv-multi-session.meta.json';
       });
       mockApp.vault.adapter.list.mockImplementation(async (path: string) => {
-        if (path === '.claudian/sessions') {
-          return { files: ['.claudian/sessions/conv-multi-session.meta.json'], folders: [] };
+        if (path === '.copilodian/sessions') {
+          return { files: ['.copilodian/sessions/conv-multi-session.meta.json'], folders: [] };
         }
         return { files: [], folders: [] };
       });
       mockApp.vault.adapter.read.mockImplementation(async (path: string) => {
-        if (path === '.claudian/sessions/conv-multi-session.meta.json') {
+        if (path === '.copilodian/sessions/conv-multi-session.meta.json') {
           return sessionMeta;
         }
-        if (path === '.claudian/claudian-settings.json') {
+        if (path === '.copilodian/copilodian-settings.json') {
           return JSON.stringify({});
         }
         return '';
@@ -492,18 +492,18 @@ describe('startApplication', () => {
       const timestamp = Date.now();
       const vault = await DesktopVault.create();
       disposals.push(() => vault.dispose());
-      await vault.write('.claudian/projects/project-a.json', JSON.stringify({
-        id: 'project-a', name: 'Launch', instructions: 'Ship.', memoryPath: '.claudian/projects/launch-project.md',
+      await vault.write('.copilodian/projects/project-a.json', JSON.stringify({
+        id: 'project-a', name: 'Launch', instructions: 'Ship.', memoryPath: '.copilodian/projects/launch-project.md',
         isPinned: true, createdAt: timestamp,
       }));
-      await vault.write('.claudian/projects/broken.json', '{"id": "broken"');
-      await vault.write('.claudian/sessions/conv-member.meta.json', JSON.stringify({
+      await vault.write('.copilodian/projects/broken.json', '{"id": "broken"');
+      await vault.write('.copilodian/sessions/conv-member.meta.json', JSON.stringify({
         id: 'conv-member', title: 'Member', createdAt: timestamp, lastActivityAt: timestamp,
         sessionId: null, projectId: 'project-a',
       }));
       plugin.app.vault = vault.app.vault;
       const projectFiles = async () => new Map([...await vault.snapshot()].filter(([path]) => (
-        path.startsWith('.claudian/projects/')
+        path.startsWith('.copilodian/projects/')
       )));
       const projectsBefore = await projectFiles();
 

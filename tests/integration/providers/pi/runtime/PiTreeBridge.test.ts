@@ -37,7 +37,7 @@ describe('Pi tree extension', () => {
   });
 
   // Pi resolves against its real working directory, while Claudian keeps the vault path it was given.
-  it('reports the session file as Claudian names it through a symlinked directory', async () => {
+  it('reports the session file as Copilodian names it through a symlinked directory', async () => {
     const root = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), 'pi-tree-symlink-')));
     cleanup.push(root);
     await fs.mkdir(path.join(root, 'real', 'sessions'), { recursive: true });

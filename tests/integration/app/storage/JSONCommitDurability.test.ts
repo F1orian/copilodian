@@ -104,7 +104,7 @@ describePosix('ordinary-file compatibility on POSIX', () => {
 
   it('retains leaf symlink write-through behavior', async () => {
     await vault.write('original.json', '{}');
-    await vault.mkdir('.claudian');
+    await vault.mkdir('.copilodian');
     await vault.symlink(CLAUDIAN_SETTINGS_PATH, vault.resolve('original.json'));
 
     await new ClaudianSettingsStorage(vault.files, DEFAULT_CLAUDIAN_SETTINGS)
@@ -116,7 +116,7 @@ describePosix('ordinary-file compatibility on POSIX', () => {
 
   it('retains hardlink write-through behavior', async () => {
     await vault.write('original.json', '{}');
-    await vault.mkdir('.claudian');
+    await vault.mkdir('.copilodian');
     await fs.link(vault.resolve('original.json'), vault.resolve(CLAUDIAN_SETTINGS_PATH));
 
     await new ClaudianSettingsStorage(vault.files, DEFAULT_CLAUDIAN_SETTINGS)
@@ -128,12 +128,12 @@ describePosix('ordinary-file compatibility on POSIX', () => {
 
   it('continues writing through a linked parent directory', async () => {
     await vault.mkdir('settings');
-    await vault.symlink('.claudian', vault.resolve('settings'));
+    await vault.symlink('.copilodian', vault.resolve('settings'));
 
     await new ClaudianSettingsStorage(vault.files, DEFAULT_CLAUDIAN_SETTINGS)
       .save({ ...structuredClone(DEFAULT_CLAUDIAN_SETTINGS), userName: 'Linked parent' });
 
-    expect(await fs.lstat(vault.resolve('.claudian')).then(stat => stat.isSymbolicLink())).toBe(true);
-    expect(JSON.parse(await vault.read('settings/claudian-settings.json'))).toMatchObject({ userName: 'Linked parent' });
+    expect(await fs.lstat(vault.resolve('.copilodian')).then(stat => stat.isSymbolicLink())).toBe(true);
+    expect(JSON.parse(await vault.read('settings/copilodian-settings.json'))).toMatchObject({ userName: 'Linked parent' });
   });
 });

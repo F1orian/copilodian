@@ -42,7 +42,7 @@ afterEach(() => {
   document.body.replaceChildren();
 });
 
-const INTERRUPTED = 'Interrupted · What should Claudian do instead?';
+const INTERRUPTED = 'Interrupted · What should Copilodian do instead?';
 /** Native turn steps after its first output: a reply cut off by `max_tokens` and resumed work continue the same turn. */
 type Boundary = 'notification' | 'compaction' | 'max-tokens' | 'tool' | 'text';
 interface Turn {

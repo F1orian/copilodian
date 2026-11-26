@@ -14,7 +14,7 @@ describe('Copilot tool normalization', () => {
     ['edit', 'Creating /vault/out.md', { file_text: 'HELLO\n', path: '/vault/out.md' }, 'create', 'Write'],
     ['edit', 'Editing /vault/out.md', { new_str: 'b', old_str: 'a', path: '/vault/out.md' }, 'edit', 'Edit'],
     ['fetch', 'Fetching https://example.com', { url: 'https://example.com' }, 'web_fetch', 'WebFetch'],
-    ['read', 'claudian_sessions-claudian_list_destinations', {}, 'claudian_sessions-claudian_list_destinations', 'claudian_list_destinations'],
+    ['read', 'copilodian_sessions-copilodian_list_destinations', {}, 'copilodian_sessions-copilodian_list_destinations', 'copilodian_list_destinations'],
     ['read', 'github-mcp-server-get_me', {}, 'github-mcp-server-get_me', 'github-mcp-server-get_me'],
     ['search', 'Searching for TODO', { pattern: 'TODO' }, 'Searching for TODO', 'Searching for TODO'],
   ])('derives %s "%s" as %s and presents it as %s', (kind, title, rawInput, nativeName, claudianName) => {

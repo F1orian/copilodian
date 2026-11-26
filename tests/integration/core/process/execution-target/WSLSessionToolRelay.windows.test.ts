@@ -66,8 +66,8 @@ describe.skipIf(!hasNativeWSL())('Windows session tool relay through WSL interop
     expect(await client.response(1)).toMatchObject({ result: { protocolVersion: '2025-03-26' } });
     client.send({ jsonrpc: '2.0', method: 'notifications/initialized' });
     client.send({ jsonrpc: '2.0', id: 2, method: 'tools/list' });
-    expect(await client.response(2)).toMatchObject({ result: { tools: expect.arrayContaining([expect.objectContaining({ name: 'claudian_list_destinations' })]) } });
-    const call = (id: number, n: number) => client.send({ jsonrpc: '2.0', id, method: 'tools/call', params: { name: 'claudian_list_destinations', arguments: { n } } });
+    expect(await client.response(2)).toMatchObject({ result: { tools: expect.arrayContaining([expect.objectContaining({ name: 'copilodian_list_destinations' })]) } });
+    const call = (id: number, n: number) => client.send({ jsonrpc: '2.0', id, method: 'tools/call', params: { name: 'copilodian_list_destinations', arguments: { n } } });
     call(3, 1); call(4, 2); call(5, 3);
     await vi.waitFor(() => expect(started.size).toBe(3), { timeout: 15_000 });
     call(6, 10);
@@ -93,7 +93,7 @@ describe.skipIf(!hasNativeWSL())('Windows session tool relay through WSL interop
     const client = await connect(route);
     client.send({ jsonrpc: '2.0', id: 1, method: 'initialize' });
     await client.response(1);
-    client.send({ jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'claudian_list_destinations', arguments: { text: 'x'.repeat(800_000) } } });
+    client.send({ jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'copilodian_list_destinations', arguments: { text: 'x'.repeat(800_000) } } });
     client.send({ jsonrpc: '2.0', method: 'notifications/cancelled', params: { requestId: 2 } });
     client.send({ jsonrpc: '2.0', id: 3, method: 'ping' });
     await client.response(3);
@@ -111,7 +111,7 @@ describe.skipIf(!hasNativeWSL())('Windows session tool relay through WSL interop
     const handler = vi.fn(async () => ({ isError: false, text: 'reply' }));
     const route = await server.registerCallRoute(handler);
     const client = await connect(route, 'call');
-    client.send({ tool: 'claudian_list_destinations', args: { key: '值' }, callerNativeId: 'child/session' });
+    client.send({ tool: 'copilodian_list_destinations', args: { key: '值' }, callerNativeId: 'child/session' });
     expect(await client.closed).toBe(0);
     expect(client.lines).toEqual([{ isError: false, text: 'reply' }]);
     expect(handler).toHaveBeenCalledWith(expect.objectContaining({ callerNativeId: 'child/session', args: { key: '值' } }));
@@ -129,7 +129,7 @@ describe.skipIf(!hasNativeWSL())('Windows session tool relay through WSL interop
       return { isError: true, text: 'cancelled' };
     });
     const client = await connect(route, 'call');
-    client.send({ tool: 'claudian_list_destinations', args: {}, callerNativeId: 'native' });
+    client.send({ tool: 'copilodian_list_destinations', args: {}, callerNativeId: 'native' });
     await admission;
     client.end();
     expect(await client.closed).toBe(0);

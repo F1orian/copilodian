@@ -126,7 +126,7 @@ describe('ClaudeExecutionEventNormalizer api error messages', () => {
   function expectAuthenticationOverrideGuidance(message: string): void {
     expect(message).toContain('If the same CLI works with a subscription separately');
     expect(message).toContain('inherited ANTHROPIC_API_KEY or ANTHROPIC_AUTH_TOKEN');
-    expect(message).toContain('Settings → Claudian → Providers → Claude Code → Environment → Custom variables');
+    expect(message).toContain('Settings → Copilodian → Providers → Claude Code → Environment → Custom variables');
     expect(message).toContain('Claude only');
     expect(message).toContain('only for the conflicting credential you intend to disable');
     expect(message).toContain('ANTHROPIC_API_KEY=');
@@ -444,8 +444,8 @@ it('omits throughput for success-subtype API errors', () => {
 });
 
 describe('Claude session message normalization', () => {
-  it.each(['claudian_list_destinations', 'claudian_send_message'])('normalizes %s in live output and native history', name => {
-    const rawName = `mcp__claudian_sessions__${name}`;
+  it.each(['copilodian_list_destinations', 'copilodian_send_message'])('normalizes %s in live output and native history', name => {
+    const rawName = `mcp__copilodian_sessions__${name}`;
     const native = { type: 'assistant' as const, message: { content: [
       { type: 'tool_use' as const, id: 'session-tool', name: rawName, input: {} },
     ] } };

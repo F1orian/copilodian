@@ -382,19 +382,19 @@ it('loads a module plugin folder once per shared server and forwards the native 
     expect(path.dirname(dir)).toBe(path.dirname(data.path));
     expect(JSON.parse(readFileSync(path.join(dir, 'package.json'), 'utf8'))).toEqual({ type: 'module' });
     expect(existsSync(path.join(dir, 'index.js'))).toBe(true);
-    const call = (sessionID: string) => control.request<{ data: { isError?: boolean; result: { output: string } } }>('/fixture/session-tool', { method: 'POST', body: { tool: 'claudian_list_destinations', args: {}, sessionID } });
+    const call = (sessionID: string) => control.request<{ data: { isError?: boolean; result: { output: string } } }>('/fixture/session-tool', { method: 'POST', body: { tool: 'copilodian_list_destinations', args: {}, sessionID } });
     expect((await call('ses_1')).data).toMatchObject({ specs: [
-      { name: 'claudian_list_destinations', options: { codemode: false } },
-      { name: 'claudian_send_message', options: { codemode: false } },
-      { name: 'claudian_read_session', options: { codemode: false } },
+      { name: 'copilodian_list_destinations', options: { codemode: false } },
+      { name: 'copilodian_send_message', options: { codemode: false } },
+      { name: 'copilodian_read_session', options: { codemode: false } },
     ], result: { output: '{"sessions":[{"sessionId":"target"}]}' } });
     expect(list).toHaveBeenCalledTimes(1);
     expect((await call('unknown')).data.isError).toBe(true);
     expect(list).toHaveBeenCalledTimes(1);
-    const aborted = await control.request<{ data: { isError?: boolean; result: { output: string } } }>('/fixture/session-tool', { method: 'POST', body: { tool: 'claudian_list_destinations', args: {}, sessionID: 'ses_1', aborted: true } });
+    const aborted = await control.request<{ data: { isError?: boolean; result: { output: string } } }>('/fixture/session-tool', { method: 'POST', body: { tool: 'copilodian_list_destinations', args: {}, sessionID: 'ses_1', aborted: true } });
     expect(aborted.data.isError).toBe(true);
     expect(list).toHaveBeenCalledTimes(1);
-    const sent = await control.request<{ data: { isError?: boolean; result: { output: string } } }>('/fixture/session-tool', { method: 'POST', body: { tool: 'claudian_send_message', args: { sessionId: 'target', text: 'Hello' }, sessionID: 'ses_1' } });
+    const sent = await control.request<{ data: { isError?: boolean; result: { output: string } } }>('/fixture/session-tool', { method: 'POST', body: { tool: 'copilodian_send_message', args: { sessionId: 'target', text: 'Hello' }, sessionID: 'ses_1' } });
     expect(sent.data.result.output).toBe('{"sessionId":"target","title":"Review","provider":"codex","status":"queued"}');
     expect(send).toHaveBeenCalledWith({ sessionId: 'target', text: 'Hello' }, expect.any(AbortSignal));
     const peer = await f.workspace.serverService.acquire(f.cli, f.root, f.environment);
@@ -408,7 +408,7 @@ it('loads a module plugin folder once per shared server and forwards the native 
     await control.dispose();
     await f.workspace.dispose?.();
     expect(existsSync(path.dirname(configPath))).toBe(false);
-    const response = await fetch(data.url, {method:'POST',headers:{'Content-Type':'application/json','X-Claudian-Route':data.routeId},body:JSON.stringify({tool:'claudian_list_destinations',args:{},callerNativeId:'ses_1'})});
+    const response = await fetch(data.url, {method:'POST',headers:{'Content-Type':'application/json','X-Copilodian-Route':data.routeId},body:JSON.stringify({tool:'copilodian_list_destinations',args:{},callerNativeId:'ses_1'})});
     expect(response.status).toBe(404);
   } finally { await session.dispose(); await run; await control.dispose(); await f.dispose(); }
 });

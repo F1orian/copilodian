@@ -132,7 +132,7 @@ if (typeof document === 'undefined' || !testWindow.localStorage) {
 }
 
 // Keep the real identity hashing/cache; tests may replace storage before importing it.
-testWindow.localStorage!.setItem('claudian.deviceSettingsKey', 'claudian-test-installation');
+testWindow.localStorage!.setItem('copilodian.deviceSettingsKey', 'claudian-test-installation');
 
 // Polyfill Obsidian DOM helpers for jsdom-based tests.
 const SVG_NS = 'http://www.w3.org/2000/svg';

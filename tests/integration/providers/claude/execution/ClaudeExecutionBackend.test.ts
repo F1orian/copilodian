@@ -275,7 +275,7 @@ describe('ClaudeExecutionBackend', () => {
       sessionTools = { list: async () => ({ sessions: [] }), send: vi.fn(), read: vi.fn() };
       await collectEvents(session.execute(createRequest()).events);
       expect(sdkMock.getQueryCallCount()).toBe(2);
-      expect(sdkMock.getLastOptions()?.mcpServers).toHaveProperty('claudian_sessions');
+      expect(sdkMock.getLastOptions()?.mcpServers).toHaveProperty('copilodian_sessions');
       sessionTools = undefined;
       await collectEvents(session.execute(createRequest()).events);
       expect(sdkMock.getQueryCallCount()).toBe(3);
@@ -386,7 +386,7 @@ describe('ClaudeExecutionBackend', () => {
     }).events);
     expect(events).toContainEqual(expect.objectContaining({ type: 'execution_error', category: 'configuration' }));
     expect(JSON.stringify(events)).toContain('selected Claude Code model is unavailable');
-    expect(JSON.stringify(events)).toContain('Open Claudian settings → Claude Code');
+    expect(JSON.stringify(events)).toContain('Open Copilodian settings → Claude Code');
     expect(sdkMock.getQueryCallCount()).toBe(0);
     await session.dispose();
   });

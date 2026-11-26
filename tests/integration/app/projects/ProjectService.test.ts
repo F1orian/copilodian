@@ -125,11 +125,11 @@ describe('ProjectService', () => {
     projects.onChanged(changed);
 
     const record = await projects.create({
-      name: 'Q3 Launch: Plan!', instructions: 'Ship it.', memoryPath: '.claudian/projects/q3-launch-plan/MEMORY.md',
+      name: 'Q3 Launch: Plan!', instructions: 'Ship it.', memoryPath: '.copilodian/projects/q3-launch-plan/MEMORY.md',
     });
 
-    expect(record.memoryPath).toBe('.claudian/projects/q3-launch-plan/MEMORY.md');
-    expect(await vault.isFolder('.claudian/projects/q3-launch-plan')).toBe(true);
+    expect(record.memoryPath).toBe('.copilodian/projects/q3-launch-plan/MEMORY.md');
+    expect(await vault.isFolder('.copilodian/projects/q3-launch-plan')).toBe(true);
     expect(await readFile(vault, record.memoryPath)).toBe(`# Q3 Launch: Plan!\n\n${TEMPLATE_SECTIONS}`);
     expect(JSON.parse((await readFile(vault, `${PROJECTS_PATH}/${record.id}.json`))!)).toEqual({
       id: record.id,
@@ -144,7 +144,7 @@ describe('ProjectService', () => {
     expect(projects.list()).toEqual([record]);
     expect(changed).toHaveBeenCalledTimes(1);
     // Only the memory file itself is left behind; the write leaves no temporary sibling.
-    expect([...(await vault.snapshot()).keys()].filter(path => path.startsWith('.claudian/projects/q3-launch-plan/')))
+    expect([...(await vault.snapshot()).keys()].filter(path => path.startsWith('.copilodian/projects/q3-launch-plan/')))
       .toEqual([record.memoryPath]);
   });
 
@@ -233,13 +233,13 @@ describe('ProjectService', () => {
   });
 
   it.each([
-    ['renames it within its folder', '.claudian/projects/launch/PLAN.md'],
+    ['renames it within its folder', '.copilodian/projects/launch/PLAN.md'],
     ['moves it into another, new folder', 'Work/Plans/Launch.md'],
     ['moves it into the vault root', '/Launch'],
   ])('%s with its edits and persists the new path', async (_label, memoryPath) => {
     const { vault, projects } = await fixture();
     const record = await projects.create({
-      name: 'Launch', instructions: '', memoryPath: '.claudian/projects/launch/MEMORY.md',
+      name: 'Launch', instructions: '', memoryPath: '.copilodian/projects/launch/MEMORY.md',
     });
     const read = await projects.readMemory(record.id);
     if ('missing' in read) throw new Error('memory file should exist');
@@ -627,7 +627,7 @@ describe('ProjectService', () => {
     vi.mocked(fs.chmod).mockImplementation(async (file, mode) => {
       const candidate = String(file);
       if (failedPaths.length === 0 && path.dirname(candidate) === path.dirname(target)
-        && /^\.claudian-.*\.tmp$/.test(path.basename(candidate))) {
+        && /^\.copilodian-.*\.tmp$/.test(path.basename(candidate))) {
         failedPaths.push(candidate);
         throw failure;
       }
@@ -640,7 +640,7 @@ describe('ProjectService', () => {
       expect(await actualFs.readFile(target, 'utf8')).toBe(original.content);
       expect((await actualFs.stat(target)).mode & 0o777).toBe(0o600);
       await expect(projects.readMemory(record.id)).resolves.toEqual(original);
-      expect((await actualFs.readdir(path.dirname(target))).filter(name => /^\.claudian-.*\.tmp$/.test(name))).toEqual([]);
+      expect((await actualFs.readdir(path.dirname(target))).filter(name => /^\.copilodian-.*\.tmp$/.test(name))).toEqual([]);
     } finally {
       vi.mocked(fs.chmod).mockImplementation(actualFs.chmod);
     }

@@ -157,5 +157,5 @@ it('treats a drive-mounted Linux store case-sensitively for history, the skill c
   await workspace.deepseek.beginTransition();
   updateDeepSeekProviderSettings(fixture.settings, { presetPlugins: '- id: tool-bash\n  name: custom-shell' });
   workspace.deepseek.endTransition();
-  await expect(workspace.deepseek.read(async () => 'read')).rejects.toThrow(/already part of Claudian/);
+  await expect(workspace.deepseek.read(async () => 'read')).rejects.toThrow(/already part of Copilodian/);
 });

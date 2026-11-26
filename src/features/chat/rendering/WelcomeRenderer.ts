@@ -1,7 +1,7 @@
 import { t } from '@/i18n/i18n';
 import type { TranslationKey } from '@/i18n/types';
 
-const WELCOME_BRAND_NAME = 'Claudian';
+const WELCOME_BRAND_NAME = 'Copilodian';
 
 export function renderWelcomeContent(
   welcomeEl: HTMLElement,

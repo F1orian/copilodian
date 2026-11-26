@@ -12,19 +12,19 @@ export const PI_TREE_EXTENSION_SOURCE = String.raw`
 import { realpathSync } from 'node:fs';
 import { basename, dirname, join, resolve } from 'node:path';
 
-// Pi keeps a relative sessionDir relative to its real working directory; Claudian holds absolute paths.
+// Pi keeps a relative sessionDir relative to its real working directory; Copilodian holds absolute paths.
 const canonical = file => {
   if (!file) return file;
   const full = resolve(file);
   try { return join(realpathSync(dirname(full)), basename(full)); } catch { return full; }
 };
-// Reports the session file as Claudian names it when both name the same file.
+// Reports the session file as Copilodian names it when both name the same file.
 const reportedFile = (file, request) => canonical(file) === canonical(request.sessionFile) ? request.sessionFile : file;
 
 export default function (pi) {
   let busy = false;
   pi.registerCommand('claudian-tree', {
-    description: 'Internal Claudian conversation navigation',
+    description: 'Internal Copilodian conversation navigation',
     handler: async (args, ctx) => {
       let request;
       let responseContext = ctx;

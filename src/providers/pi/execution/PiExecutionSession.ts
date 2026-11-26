@@ -1008,7 +1008,7 @@ implements ProviderExecutionSession, SteerableExecutionSession {
       if (!(error instanceof PiRPCResponseError)) throw error;
       throw new PiConfigurationError(
         `Pi cannot use ${modelPayload.provider}/${modelPayload.modelId} in its current environment (${error.message}). `
-        + 'Open Claudian settings → Pi, click Discover, and choose an available model.',
+        + 'Open Copilodian settings → Pi, click Discover, and choose an available model.',
       );
     }
     this.#kernelModel = encoded.model;
@@ -1947,7 +1947,7 @@ function resolveSelectedModel(
     || !settings.visibleModels.includes(model)
   ) {
     throw new PiConfigurationError(
-      'No Pi model is selected. Enable a discovered model in Claudian settings.',
+      'No Pi model is selected. Enable a discovered model in Copilodian settings.',
     );
   }
   return model;

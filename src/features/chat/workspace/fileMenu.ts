@@ -19,11 +19,11 @@ export async function addFileToClaudian(host: FileMenuHost, file: TFile): Promis
     await host.activateView();
     const appended = host.getView()?.appendToActiveInput(formatComposerWikilink(file.path)) ?? false;
     if (!appended) {
-      new Notice('Claudian chat is not ready.');
+      new Notice('Copilodian chat is not ready.');
     }
     return appended;
   } catch {
-    new Notice('Failed to add file to Claudian.');
+    new Notice('Failed to add file to Copilodian.');
     return false;
   }
 }
@@ -34,7 +34,7 @@ export function registerFileMenu(host: FileMenuHost): void {
       if (!(file instanceof TFile)) return;
 
       menu.addItem((item) => item
-        .setTitle('Add to Claudian')
+        .setTitle('Add to Copilodian')
         .setIcon('message-square-plus')
         .onClick(() => addFileToClaudian(host, file)));
     }),

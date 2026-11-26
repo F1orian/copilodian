@@ -152,7 +152,7 @@ describe.skipIf(!available)('native Windows to WSL execution', { timeout: 60_000
         expect(await kernel.request('get_state')).toMatchObject({ sessionId: 'pi-source', sessionFile: piTargetPath(sessionFile, resolvedTarget) });
         expect(await kernel.request('claudian_tree', { operation: 'inspect', sessionId: 'pi-source', sessionFile: piTargetPath(sessionFile, resolvedTarget) }))
           .toMatchObject({ cancelled: false, sessionId: 'pi-source', leafId: 'answer-1' });
-        expect(await kernel.request('fixture_tool', { name: 'claudian_list_destinations', toolCallId: 'list', args: {} }))
+        expect(await kernel.request('fixture_tool', { name: 'copilodian_list_destinations', toolCallId: 'list', args: {} }))
           .toMatchObject({ isError: false, content: [{ text: '{"sessions":[]}' }] });
         expect(port.list).toHaveBeenCalledOnce();
       } finally { await kernel.shutdown(); }

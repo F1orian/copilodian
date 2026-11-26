@@ -105,7 +105,7 @@ describe.skipIf(!hasNativeWSL())('DeepSeek fixture Host in native WSL', { timeou
       expect(info.httpAuth).toBeGreaterThan(0); expect(info.websocketAuth).toBeGreaterThan(0);
       expect(await readFile(mapper.toHostPath(info.promptFile)!, 'utf8')).toBe('literal {{prompt}} $HOME 中文');
       await withdraw();
-      const tool = (id: string, caller: string, input: unknown) => lease.client.call('fixture/tool', { id, caller, input, tool: 'claudian_list_destinations' });
+      const tool = (id: string, caller: string, input: unknown) => lease.client.call('fixture/tool', { id, caller, input, tool: 'copilodian_list_destinations' });
       expect(await tool('success', 'child', { includeProviders: true })).toEqual({ text: 'Windows route answered 中文', isError: false });
       expect(calls).toEqual([{ caller: 'child', input: { includeProviders: true } }]);
       await expect(tool('denied', 'unbound', {})).rejects.toThrow(/Unbound/);

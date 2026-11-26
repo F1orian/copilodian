@@ -22,7 +22,7 @@ const sdk = sdkModule as unknown as {
   resetMockMessages(): void;
   setMockMessages(messages: unknown[], options?: { appendResult: boolean }): void;
 };
-const nativeName = 'mcp__claudian_sessions__claudian_list_destinations';
+const nativeName = 'mcp__copilodian_sessions__copilodian_list_destinations';
 const result = { type: 'result', subtype: 'success' };
 function deferred<T>() {
   let resolve!: (value: T) => void;
@@ -68,8 +68,8 @@ async function until(check: () => boolean) {
   throw new Error('Expected native boundary was not reached');
 }
 async function connect() {
-  const server = sdk.getLastOptions()?.mcpServers?.claudian_sessions;
-  expect(server).toMatchObject({ type: 'sdk', name: 'claudian_sessions', timeout: expect.any(Number), disableAutoBackground: true });
+  const server = sdk.getLastOptions()?.mcpServers?.copilodian_sessions;
+  expect(server).toMatchObject({ type: 'sdk', name: 'copilodian_sessions', timeout: expect.any(Number), disableAutoBackground: true });
   expect(sdk.getLastOptions()).not.toHaveProperty('strictMcpConfig');
   const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
   await (server as unknown as { instance: SessionToolMCPServer }).instance.connect(serverTransport);
@@ -78,7 +78,7 @@ async function connect() {
   return client;
 }
 function call(client: Client, id: string) {
-  return client.callTool({ name: 'claudian_list_destinations', arguments: {}, _meta: { 'claudecode/toolUseId': id } });
+  return client.callTool({ name: 'copilodian_list_destinations', arguments: {}, _meta: { 'claudecode/toolUseId': id } });
 }
 
 describe('Claude session tools', () => {
@@ -92,19 +92,19 @@ describe('Claude session tools', () => {
     const bound = await session({ list: async () => ({ sessions: [] }), send: vi.fn(), read: vi.fn() }, lifecycle);
     try {
       await drain(bound.execute(request()).events);
-      const first = sdk.getLastOptions()?.mcpServers?.claudian_sessions;
+      const first = sdk.getLastOptions()?.mcpServers?.copilodian_sessions;
       const client = await connect();
       const tools = (await client.listTools()).tools;
-      expect(tools.map(t => t.name)).toEqual(['claudian_list_destinations', 'claudian_send_message', 'claudian_read_session']);
+      expect(tools.map(t => t.name)).toEqual(['copilodian_list_destinations', 'copilodian_send_message', 'copilodian_read_session']);
       expect(tools.every(t => t._meta?.['anthropic/alwaysLoad'] === true)).toBe(true);
-      expect(await client.callTool({ name: 'claudian_list_destinations', arguments: {} })).toMatchObject({ isError: true });
+      expect(await client.callTool({ name: 'copilodian_list_destinations', arguments: {} })).toMatchObject({ isError: true });
       await client.close();
       await drain(bound.execute(request()).events);
-      expect(sdk.getLastOptions()?.mcpServers?.claudian_sessions === first).toBe(lifecycle === 'persistent');
+      expect(sdk.getLastOptions()?.mcpServers?.copilodian_sessions === first).toBe(lifecycle === 'persistent');
       // Different instructions force a new persistent query too.
       const next = request();
       await drain(bound.execute({ ...next, configuration: { ...next.configuration, systemInstructions: { kind: 'explicit', purpose: 'title', instructions: 'Changed' } } }).events);
-      expect(sdk.getLastOptions()?.mcpServers?.claudian_sessions).not.toBe(first);
+      expect(sdk.getLastOptions()?.mcpServers?.copilodian_sessions).not.toBe(first);
     } finally { await bound.dispose(); }
   });
 
@@ -161,7 +161,7 @@ describe('Claude session tools', () => {
   it('routes send arguments and native cancellation through the caller port', async () => {
     const end = deferred<unknown>();
     const sendTool = tool('send');
-    sendTool.message.content[0].name = 'mcp__claudian_sessions__claudian_send_message';
+    sendTool.message.content[0].name = 'mcp__copilodian_sessions__copilodian_send_message';
     sdk.setMockMessages([sendTool, end.promise], { appendResult: false });
     const entered = deferred<AbortSignal>();
     const send = vi.fn((_args, signal: AbortSignal) => {
@@ -180,7 +180,7 @@ describe('Claude session tools', () => {
       client = await connect();
       const nativeAbort = new AbortController();
       const pending = client.callTool({
-        name: 'claudian_send_message', arguments: { sessionId: 'recipient', text: 'Hello' },
+        name: 'copilodian_send_message', arguments: { sessionId: 'recipient', text: 'Hello' },
         _meta: { 'claudecode/toolUseId': 'send' },
       }, undefined, { signal: nativeAbort.signal });
       const outcome = pending.then(value => ({ value }), error => ({ error }));

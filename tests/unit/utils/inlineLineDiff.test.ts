@@ -18,8 +18,8 @@ describe('inlineLineDiff', () => {
     });
 
     it('keeps non-CJK words intact and separates punctuation and whitespace', () => {
-      expect(tokenizeDiffLine('在 Obsidian 中使用 Claudian 插件')).toEqual([
-        '在', ' ', 'Obsidian', ' ', '中', '使', '用', ' ', 'Claudian', ' ', '插', '件',
+      expect(tokenizeDiffLine('在 Obsidian 中使用 Copilodian 插件')).toEqual([
+        '在', ' ', 'Obsidian', ' ', '中', '使', '用', ' ', 'Copilodian', ' ', '插', '件',
       ]);
       expect(tokenizeDiffLine('const old_value = compute(a, b);')).toEqual([
         'const', ' ', 'old', '_', 'value', ' ', '=', ' ', 'compute', '(', 'a', ',', ' ', 'b', ')', ';',

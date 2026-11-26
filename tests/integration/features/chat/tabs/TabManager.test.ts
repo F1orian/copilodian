@@ -1153,7 +1153,7 @@ it.each(['close', 'delete'] as const)('discards a restored assembly continuation
   expect(manager.getTabIdentities().find(tab => tab.id === 'two')?.conversationId).toBe(operation === 'close' ? undefined : null);
 });
 
-it('reloads an open tab whose native history changed outside Claudian while another tab was shown', async () => {
+it('reloads an open tab whose native history changed outside Copilodian while another tab was shown', async () => {
   const at = testDate().getTime();
   const native = { revision: 'before', messages: [{ id: 'cached', role: 'assistant' as const, content: 'Cached reply', timestamp: at }] };
   const plugin = await createPlugin({

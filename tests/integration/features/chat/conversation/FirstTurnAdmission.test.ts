@@ -218,7 +218,7 @@ it('does not steer Linked content captured while the first turn resolves session
   });
   const turn = fixture.holdNextResponse();
 
-  const first = fixture.controller.sendMessage({ content: 'Use @[Source](claudian-session:conv-1-source)' });
+  const first = fixture.controller.sendMessage({ content: 'Use @[Source](copilodian-session:conv-1-source)' });
   await waitForCall(fixture.plugin.getConversationById);
   await fixture.controller.sendMessage({ content: 'steered follow-up' });
   source.resolve({

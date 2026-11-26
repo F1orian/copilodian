@@ -133,7 +133,7 @@ function permissionRequest(kind: string, title: string, sessionId = 'session-new
 }
 
 describe('CopilotExecutionSession', () => {
-  it('creates a session, delivers Claudian instructions at launch and streams the turn', async () => {
+  it('creates a session, delivers Copilodian instructions at launch and streams the turn', async () => {
     const merged: Array<{ defaultModelId: string | null; models: CopilotModel[] }> = [];
     const session = await createSession({}, () => {}, {
       mergeLiveModels: async (models, defaultModelId) => { merged.push({ defaultModelId, models }); },
@@ -237,7 +237,7 @@ describe('CopilotExecutionSession', () => {
     const run = session.execute(titleRequest());
     const peer = await spawnedProcess(1);
     await peer.waitForPrompts(1);
-    expect(peer.args).toEqual(['--acp', '--stdio', '--available-tools=claudian_no_tools']);
+    expect(peer.args).toEqual(['--acp', '--stdio', '--available-tools=copilodian_no_tools']);
     expect(peer.instructionsAtLaunch[0]).toContain('Title only.');
     await expect(peer.requestPermission(permissionRequest('execute', 'ls'))).resolves.toEqual({ outcome: { outcome: 'cancelled' } });
     expect(port.requestApproval).not.toHaveBeenCalled();
@@ -292,7 +292,7 @@ describe('CopilotExecutionSession', () => {
       .resolves.toEqual({ outcome: { optionId: 'allow_once', outcome: 'selected' } });
     await expect(peer.requestPermission(permissionRequest('edit', 'Create file'))).resolves.toEqual({ outcome: { outcome: 'cancelled' } });
     await expect(peer.requestPermission(permissionRequest('execute', 'Run command'))).resolves.toEqual({ outcome: { outcome: 'cancelled' } });
-    await expect(peer.requestPermission(permissionRequest('other', 'claudian_list_destinations')))
+    await expect(peer.requestPermission(permissionRequest('other', 'copilodian_list_destinations')))
       .resolves.toEqual({ outcome: { optionId: 'allow_once', outcome: 'selected' } });
     expect(port.requestApproval).not.toHaveBeenCalled();
     // Read-only work keeps Copilot's own approvals on.
@@ -301,24 +301,24 @@ describe('CopilotExecutionSession', () => {
     await collect(run.events);
   });
 
-  it('attaches Claudian session tools over MCP and approves them without asking', async () => {
+  it('attaches Copilodian session tools over MCP and approves them without asking', async () => {
     const port = createInteractionPort();
     const list = vi.fn(async () => ({ sessions: [] }));
     const session = await createSession({ interactionPort: port, sessionTools: { list, read: vi.fn(), send: vi.fn() } });
     const run = session.execute(request());
     const peer = await spawnedProcess(1);
     await peer.waitForPrompts(1);
-    expect(peer.prompts[0].mcpServersAtReceipt).toEqual([expect.objectContaining({ name: 'claudian_sessions', type: 'http' })]);
-    await expect(peer.requestPermission(permissionRequest('other', 'claudian_list_destinations')))
+    expect(peer.prompts[0].mcpServersAtReceipt).toEqual([expect.objectContaining({ name: 'copilodian_sessions', type: 'http' })]);
+    await expect(peer.requestPermission(permissionRequest('other', 'copilodian_list_destinations')))
       .resolves.toEqual({ outcome: { optionId: 'allow_once', outcome: 'selected' } });
-    await peer.callMCP('session-new', 'claudian_list_destinations', {});
+    await peer.callMCP('session-new', 'copilodian_list_destinations', {});
     expect(list).toHaveBeenCalledTimes(1);
     expect(port.requestApproval).not.toHaveBeenCalled();
     peer.finishPrompt();
     await collect(run.events);
   });
 
-  it('presents Copilot tool calls under Claudian tool names', async () => {
+  it('presents Copilot tool calls under Copilodian tool names', async () => {
     const session = await createSession();
     const run = session.execute(request());
     const peer = await spawnedProcess(1);

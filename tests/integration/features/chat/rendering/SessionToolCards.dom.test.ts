@@ -23,7 +23,7 @@ const listResult = (extra: Record<string, unknown> = {}) => JSON.stringify({
   truncated: true,
   ...extra,
 });
-const MESSAGE = 'Test message from another Claudian session.\nNo reply needed — this is just a delivery check.';
+const MESSAGE = 'Test message from another Copilodian session.\nNo reply needed — this is just a delivery check.';
 
 function setup(known: readonly string[] = [CALLER, RECIPIENT]) {
   document.body.replaceChildren();
@@ -58,7 +58,7 @@ it('replays a destination listing with status badges, self marker and session li
   const h = setup();
   try {
     h.renderer.renderMessages([assistant([{
-      id: 'list', name: 'claudian_list_destinations', input: { limit: 10 }, status: 'completed', result: listResult(),
+      id: 'list', name: 'copilodian_list_destinations', input: { limit: 10 }, status: 'completed', result: listResult(),
     }])], () => '');
     const card = expand(h.messagesEl, /List destinations/);
 
@@ -92,7 +92,7 @@ it('notes the provider catalog without listing it, and tolerates listings withou
       ] }],
     });
     h.renderer.renderMessages([assistant([{
-      id: 'list', name: 'claudian_list_destinations', input: { includeProviders: true }, status: 'completed', result: legacy,
+      id: 'list', name: 'copilodian_list_destinations', input: { includeProviders: true }, status: 'completed', result: legacy,
     }])], () => '');
     const card = expand(h.messagesEl, /List destinations/);
     expect(within(card).getByRole('button', { name: 'hi' })).toBeTruthy();
@@ -105,11 +105,11 @@ it('notes the provider catalog without listing it, and tolerates listings withou
 });
 
 it.each([
-  ['claudian_list_destinations', { limit: 10 }, /List destinations/],
-  ['claudian_send_message', { sessionId: RECIPIENT, text: MESSAGE }, /Message session/],
+  ['copilodian_list_destinations', { limit: 10 }, /List destinations/],
+  ['copilodian_send_message', { sessionId: RECIPIENT, text: MESSAGE }, /Message session/],
 ])('shows the error text of a failed %s call', (name, input, header) => {
   const h = setup();
-  const error = 'Session tools are only available in Claudian main chat sessions with the default tool policy.';
+  const error = 'Session tools are only available in Copilodian main chat sessions with the default tool policy.';
   try {
     h.renderer.renderMessages([assistant([{ id: 'failed', name, input, status: 'error', result: error }])], () => '');
     const card = expand(h.messagesEl, header);
@@ -129,7 +129,7 @@ it('streams a live send card whose recipient, requested model and message come f
   const contentEl = h.renderer.addMessage(message).createDiv();
   state.currentContentEl = contentEl;
   try {
-    stream.use({ type: 'tool_use', id: 'send', name: 'claudian_send_message', input: {
+    stream.use({ type: 'tool_use', id: 'send', name: 'copilodian_send_message', input: {
       sessionId: RECIPIENT, text: MESSAGE, model: 'deepseek-pro', reasoning: 'low',
     } }, message);
     stream.flush();
@@ -156,11 +156,11 @@ it('names the recipient by its current title when an older send result lacks one
   try {
     h.renderer.renderMessages([assistant([
       {
-        id: 'send', name: 'claudian_send_message', input: { sessionId: RECIPIENT, text: 'Hello' }, status: 'completed',
+        id: 'send', name: 'copilodian_send_message', input: { sessionId: RECIPIENT, text: 'Hello' }, status: 'completed',
         result: JSON.stringify({ sessionId: RECIPIENT, status: 'started' }),
       },
       {
-        id: 'send-gone', name: 'claudian_send_message', input: { sessionId: 'conv-gone', text: 'Hello' }, status: 'completed',
+        id: 'send-gone', name: 'copilodian_send_message', input: { sessionId: 'conv-gone', text: 'Hello' }, status: 'completed',
         result: JSON.stringify({ sessionId: 'conv-gone', status: 'started' }),
       },
     ])], () => '');
@@ -180,7 +180,7 @@ it('labels a recipient the send created as a new session, not by its placeholder
   const h = setup();
   try {
     h.renderer.renderMessages([assistant([{
-      id: 'send-new', name: 'claudian_send_message', status: 'completed',
+      id: 'send-new', name: 'copilodian_send_message', status: 'completed',
       input: { text: MESSAGE, provider: 'deepseek', model: 'deepseek:deepseek-official/deepseek-flash' },
       result: JSON.stringify({ sessionId: RECIPIENT, title: 'Oct 14, 11:33 AM', provider: 'deepseek', status: 'started' }),
     }])], () => '');
@@ -196,7 +196,7 @@ it('reports a session that no longer exists instead of opening it', async () => 
   const h = setup([CALLER]);
   try {
     h.renderer.renderMessages([assistant([{
-      id: 'list', name: 'claudian_list_destinations', input: {}, status: 'completed', result: listResult(),
+      id: 'list', name: 'copilodian_list_destinations', input: {}, status: 'completed', result: listResult(),
     }])], () => '');
     const card = expand(h.messagesEl, /List destinations/);
     fireEvent.click(within(card).getByRole('button', { name: 'hi' }));
@@ -213,15 +213,15 @@ it('shows which session and turns a read returned, not the transcript, and names
   try {
     h.renderer.renderMessages([assistant([
       {
-        id: 'read', name: 'claudian_read_session', input: { sessionId: RECIPIENT, beforeTurn: 6 }, status: 'completed',
+        id: 'read', name: 'copilodian_read_session', input: { sessionId: RECIPIENT, beforeTurn: 6 }, status: 'completed',
         result: JSON.stringify({
           sessionId: RECIPIENT, title: 'hi', provider: 'deepseek', status: 'idle',
           content: '# hi\n\n## T2 user\nsecret prompt', fromTurn: 2, toTurn: 5, totalTurns: 7,
         }),
       },
-      { id: 'read-pending', name: 'claudian_read_session', input: { sessionId: RECIPIENT }, status: 'running' },
+      { id: 'read-pending', name: 'copilodian_read_session', input: { sessionId: RECIPIENT }, status: 'running' },
       {
-        id: 'read-empty', name: 'claudian_read_session', input: { sessionId: RECIPIENT }, status: 'completed',
+        id: 'read-empty', name: 'copilodian_read_session', input: { sessionId: RECIPIENT }, status: 'completed',
         result: JSON.stringify({ sessionId: RECIPIENT, title: 'hi', provider: 'deepseek', status: 'running', content: '# hi\n', fromTurn: 0, toTurn: 0, totalTurns: 0 }),
       },
     ])], () => '');
@@ -244,10 +244,10 @@ it('shows how a send was delivered, and names an interrupt without a message as 
   const result = (status: string) => JSON.stringify({ sessionId: RECIPIENT, title: 'hi', provider: 'deepseek', status });
   try {
     h.renderer.renderMessages([assistant([
-      { id: 'steer', name: 'claudian_send_message', status: 'completed', input: { sessionId: RECIPIENT, text: 'Also check X', mode: 'steer' }, result: result('steered') },
-      { id: 'redirect', name: 'claudian_send_message', status: 'completed', input: { sessionId: RECIPIENT, text: 'Do Y instead', mode: 'interrupt' }, result: result('interrupted') },
-      { id: 'stop', name: 'claudian_send_message', status: 'completed', input: { sessionId: RECIPIENT, mode: 'interrupt' }, result: result('interrupted') },
-      { id: 'queue', name: 'claudian_send_message', status: 'completed', input: { sessionId: RECIPIENT, text: 'Plain' }, result: result('queued') },
+      { id: 'steer', name: 'copilodian_send_message', status: 'completed', input: { sessionId: RECIPIENT, text: 'Also check X', mode: 'steer' }, result: result('steered') },
+      { id: 'redirect', name: 'copilodian_send_message', status: 'completed', input: { sessionId: RECIPIENT, text: 'Do Y instead', mode: 'interrupt' }, result: result('interrupted') },
+      { id: 'stop', name: 'copilodian_send_message', status: 'completed', input: { sessionId: RECIPIENT, mode: 'interrupt' }, result: result('interrupted') },
+      { id: 'queue', name: 'copilodian_send_message', status: 'completed', input: { sessionId: RECIPIENT, text: 'Plain' }, result: result('queued') },
     ])], () => '');
     const headers = within(h.messagesEl).getAllByRole('button', { name: /Message session|Stop session/ });
     expect(headers.map(header => header.textContent?.match(/Message session|Stop session/)?.[0])).toEqual(['Message session', 'Message session', 'Stop session', 'Message session']);

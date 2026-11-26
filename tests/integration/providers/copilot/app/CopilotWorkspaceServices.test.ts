@@ -49,7 +49,7 @@ function loaderContext(): ProviderCommandLoaderContext {
 }
 
 describe('Copilot workspace metadata discovery', () => {
-  it('lists Copilot commands except those that conflict with Claudian controls', async () => {
+  it('lists Copilot commands except those that conflict with Copilodian controls', async () => {
     const result = await services.commandLoader!.loadCommands(loaderContext());
 
     if (result.status !== 'ready') throw new Error(`Expected ready commands, got ${result.status}`);

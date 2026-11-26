@@ -116,7 +116,7 @@ export async function prepareDeepSeekLaunchArtifacts(
         { id: 'claudian-lifecycle', name: targetPath(lifecyclePath) },
         ...DEEPSEEK_PRESETS.map(preset => ({
           id: `preset-${preset}`, name: '@deepseek-ai/dsh-agent-preset',
-          config: { id: preset, name: 'Claudian', plugins: buildDeepSeekPresetPlugins(preset, paths, presetPlugins, platform).map(row => anchorModuleName(row, platform)) },
+          config: { id: preset, name: 'Copilodian', plugins: buildDeepSeekPresetPlugins(preset, paths, presetPlugins, platform).map(row => anchorModuleName(row, platform)) },
         })),
       ] },
       { insert: [{ id: 'claudian-ephemeral', name: targetPath(ephemeralPath), config: { stateFile: targetPath(ephemeralStatePath), readyFile: targetPath(ephemeralReadyPath), spillRoot: targetPath(ephemeralSpillPath), attachmentRoot: targetPath(ephemeralAttachmentPath) } }] },

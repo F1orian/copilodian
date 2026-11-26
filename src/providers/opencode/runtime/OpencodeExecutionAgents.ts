@@ -22,7 +22,7 @@ export function buildAgentConfig(
   return profile === 'readonly'
     ? {
       definition: {
-        description: 'Claudian read-only execution agent.',
+        description: 'Copilodian read-only execution agent.',
         mode: 'primary',
         permission: {
           '*': 'deny',
@@ -40,7 +40,7 @@ export function buildAgentConfig(
     }
     : {
       definition: {
-        description: 'Claudian passive execution agent.',
+        description: 'Copilodian passive execution agent.',
         mode: 'primary',
         permission: {
           '*': 'deny',

@@ -70,7 +70,7 @@ describe('CodexExecutionServerRequestRouter', () => {
       router.setDynamicToolRegistry(registry);
       const params = { threadId: 'thread-confirmation', turnId: 'turn-confirmation', callId: 'call', arguments: {} };
       const allowed = kind === 'provider-default';
-      await expect(router.handleServerRequest('session', 'item/tool/call', { ...params, namespace: 'claudian_sessions', tool: 'claudian_list_destinations' })).resolves.toMatchObject({ success: allowed });
+      await expect(router.handleServerRequest('session', 'item/tool/call', { ...params, namespace: 'copilodian_sessions', tool: 'copilodian_list_destinations' })).resolves.toMatchObject({ success: allowed });
       expect(port.list).toHaveBeenCalledTimes(allowed ? 1 : 0);
       const ordinaryCall = await router.handleServerRequest('ordinary', 'item/tool/call', { ...params, namespace: null, tool: 'ordinary' })
         .catch((error: unknown) => error instanceof Error ? error.message : error);

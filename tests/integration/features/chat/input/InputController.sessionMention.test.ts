@@ -12,7 +12,7 @@ import { cancelSelectedDestinationTurn } from '@/features/chat/tabs/TabInputEven
 import { VaultMentionDataProvider } from '@/shared/mention/VaultMentionDataProvider';
 
 const id = 'conv-1-source';
-const token = `@[Old title](claudian-session:${id})`;
+const token = `@[Old title](copilodian-session:${id})`;
 const time = testDate().getTime();
 
 async function setup(sourceId = id) {

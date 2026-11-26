@@ -261,7 +261,7 @@ async function selectDenialDuringBaselineRead() {
   } };
 }
 
-it('dismisses a selected denial when native history changed outside Claudian before the approval', async () => {
+it('dismisses a selected denial when native history changed outside Copilodian before the approval', async () => {
   const { s, approval, denials, finishRead } = await selectDenialDuringBaselineRead();
   finishRead('rewound elsewhere');
   expect(await approval).toBe('dismissed');
@@ -774,7 +774,7 @@ it('keeps an external change unabsorbed when a send fails before reaching the pr
   s.continueElsewhere();
   const readConversation = vi.mocked(s.h.plugin.getConversationById).getMockImplementation()!;
   vi.mocked(s.h.plugin.getConversationById).mockImplementation(async id => id === 'conv-1-missing' ? null : readConversation(id));
-  s.first.controllers.drafts.restore('main', { content: 'Compare with @[Missing](claudian-session:conv-1-missing)' });
+  s.first.controllers.drafts.restore('main', { content: 'Compare with @[Missing](copilodian-session:conv-1-missing)' });
   await s.first.controllers.inputController.sendMessage();
   expect(s.provider.requests).toHaveLength(0);
   await s.detach();
@@ -797,7 +797,7 @@ it('keeps an external change unabsorbed when the check at work start cannot read
   vi.mocked(s.h.plugin.getConversationById).mockImplementation(async id => id === 'conv-1-missing' ? null : readConversation(id));
   // Only the read when the send starts cannot answer; a later read sees the external revision.
   native.unreadableReads = 1;
-  s.first.controllers.drafts.restore('main', { content: 'Compare with @[Missing](claudian-session:conv-1-missing)' });
+  s.first.controllers.drafts.restore('main', { content: 'Compare with @[Missing](copilodian-session:conv-1-missing)' });
   await s.first.controllers.inputController.sendMessage();
   await waitFor(() => expect(s.reads.at(-1)).toBeNull());
   expect(s.provider.requests).toHaveLength(0);
@@ -1204,7 +1204,7 @@ it('retains failed queued reference preparation as session recovery after its ta
   await waitFor(() => expect(h.backend.sessions[0]?.requests).toHaveLength(1));
   const reference = deferred<Conversation | null>();
   vi.mocked(h.plugin.getConversationById).mockImplementationOnce(() => reference.promise);
-  const original = '@[Reference](claudian-session:conv-1-source)';
+  const original = '@[Reference](copilodian-session:conv-1-source)';
   first.controllers.drafts.restore('main', { content: original });
   const preparing = first.controllers.inputController.sendMessage();
   await waitFor(() => expect(h.plugin.getConversationById).toHaveBeenCalledWith('conv-1-source'));
@@ -1235,11 +1235,11 @@ it('preserves raw drafts when multiple reference preparations recover after deta
   vi.mocked(h.plugin.getConversationById)
     .mockImplementationOnce(() => reference.promise)
     .mockResolvedValueOnce(null);
-  const firstDraft = '    keepIndented()\n\n@[First](claudian-session:conv-1-source)  \n';
+  const firstDraft = '    keepIndented()\n\n@[First](copilodian-session:conv-1-source)  \n';
   first.controllers.drafts.restore('main', { content: firstDraft });
   const preparingFirst = first.controllers.inputController.sendMessage();
   await waitFor(() => expect(h.plugin.getConversationById).toHaveBeenCalledWith('conv-1-source'));
-  const secondDraft = '@[Second](claudian-session:conv-2-source)';
+  const secondDraft = '@[Second](copilodian-session:conv-2-source)';
   first.controllers.drafts.restore('main', { content: secondDraft });
   const preparingSecond = first.controllers.inputController.sendMessage();
   await destroyTab(first);
@@ -1381,7 +1381,7 @@ it.each([false, true])('keeps completed detached work unread until its transcrip
       messages: [{ id: 'reference', role: 'user', content: 'Reference text', timestamp: testDate().getTime() }],
     } as Conversation);
   }
-  first.controllers.drafts.restore('main', { content: hasReference ? 'Read @[Reference](claudian-session:conv-1-source)' : 'Read later' });
+  first.controllers.drafts.restore('main', { content: hasReference ? 'Read @[Reference](copilodian-session:conv-1-source)' : 'Read later' });
   const sending = first.controllers.inputController.sendMessage();
   await waitFor(() => expect(h.backend.sessions[0]?.requests).toHaveLength(1));
   const runtime = first.session.runtime;

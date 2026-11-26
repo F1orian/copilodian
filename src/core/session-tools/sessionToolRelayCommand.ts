@@ -30,7 +30,7 @@ public static class ClaudianSessionToolRelay {
     using (var handler = new HttpClientHandler { AllowAutoRedirect = false, UseProxy = false })
     using (var client = new HttpClient(handler)) {
       client.Timeout = Timeout.InfiniteTimeSpan;
-      client.DefaultRequestHeaders.Add("X-Claudian-Route", Environment.GetEnvironmentVariable("CLAUDIAN_SESSION_TOOL_ROUTE"));
+      client.DefaultRequestHeaders.Add("X-Copilodian-Route", Environment.GetEnvironmentVariable("CLAUDIAN_SESSION_TOOL_ROUTE"));
       var failed = new TaskCompletionSource<bool>();
       var completed = new TaskCompletionSource<bool>();
       var outputLock = new object();

@@ -713,9 +713,9 @@ it.each([
   },
   {
     rawName: 'use_tool',
-    rawInput: { tool_name: 'claudian_sessions__claudian_send_message', tool_input: { text: 'hello' } },
-    rawOutput: { type: 'MCP', server_name: 'claudian_sessions', tool_name: 'claudian_send_message', output: { OkayOutput: 'queued' } },
-    name: 'claudian_send_message', input: { text: 'hello' },
+    rawInput: { tool_name: 'copilodian_sessions__copilodian_send_message', tool_input: { text: 'hello' } },
+    rawOutput: { type: 'MCP', server_name: 'copilodian_sessions', tool_name: 'copilodian_send_message', output: { OkayOutput: 'queued' } },
+    name: 'copilodian_send_message', input: { text: 'hello' },
   },
 ])('normalizes live $rawName names, inputs, results, and provider payloads like replay', async ({ rawName, rawInput, rawOutput, name, input }) => {
   const native = new GrokNativeProcess();
@@ -973,7 +973,7 @@ describe('WSL installations', () => {
     expect(initial.cwd).toBe('/mnt/c/vault');
     const [server] = initial.mcpServers;
     if (!('command' in server)) throw new Error('Expected a stdio relay server');
-    expect(server).toMatchObject({ name: 'claudian_sessions', command: '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe' });
+    expect(server).toMatchObject({ name: 'copilodian_sessions', command: '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe' });
     expect(server).not.toHaveProperty('url');
     const routeId = server.env?.find(variable => variable.name === 'CLAUDIAN_SESSION_TOOL_ROUTE')?.value;
     expect(routeId).toBeTruthy();

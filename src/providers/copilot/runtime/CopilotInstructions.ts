@@ -4,7 +4,7 @@ import path from 'node:path';
 
 /** Copilot reads every `*.instructions.md` under the directories listed here, in addition to native ones. */
 export const COPILOT_CUSTOM_INSTRUCTIONS_DIRS_ENV = 'COPILOT_CUSTOM_INSTRUCTIONS_DIRS';
-const COPILOT_INSTRUCTIONS_FILE_NAME = 'claudian.instructions.md';
+const COPILOT_INSTRUCTIONS_FILE_NAME = 'copilodian.instructions.md';
 
 /**
  * One process's Claudian instructions. Copilot has no ACP field for a system prompt and reads custom instruction

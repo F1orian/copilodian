@@ -231,7 +231,7 @@ describe('AntigravityExecutionSession', () => {
     expect(peer.prompts[0].appendsAtReceipt).toEqual(['Be exact.']);
     expect(peer.prompts[0].mcpServersAtReceipt).toEqual(peer.newRequests[0].mcpServers);
     expect(peer.resumeRequests[0].mcpServers).toEqual(peer.newRequests[0].mcpServers);
-    await peer.callMCP('session-new', 'claudian_list_destinations', {});
+    await peer.callMCP('session-new', 'copilodian_list_destinations', {});
     expect(list).toHaveBeenCalledTimes(1);
     peer.finishPrompt();
     await collect(run.events);
@@ -275,7 +275,7 @@ describe('AntigravityExecutionSession', () => {
     const run = restored.execute(request());
     const peer = await spawnedProcess(2);
     await peer.waitForPrompts(1);
-    await peer.callMCP('session-new', 'claudian_list_destinations', {});
+    await peer.callMCP('session-new', 'copilodian_list_destinations', {});
     expect(list).toHaveBeenCalledTimes(1);
     expect(peer.newRequests).toHaveLength(0);
     expect(peer.agentName).toBeUndefined();
@@ -309,8 +309,8 @@ describe('AntigravityExecutionSession', () => {
 
   it.each([
     ['foreign', 'Someone else', 'Personal instructions.'],
-    ['near-match description', 'Managed by Claudian. Do not edit. (customized)', 'Personal instructions.'],
-    ['body-only marker', 'Someone else', 'Managed by Claudian. Do not edit.'],
+    ['near-match description', 'Managed by Copilodian. Do not edit. (customized)', 'Personal instructions.'],
+    ['body-only marker', 'Someone else', 'Managed by Copilodian. Do not edit.'],
   ].map(([label, description, body]) => [label, [
     '---', 'name: claudian-title', `description: ${description}`, 'mainAgent: true',
     'subagent: false', 'excludeDefaultComponents: true', 'tools: [read_file]', '---', body,
@@ -523,7 +523,7 @@ describe('AntigravityExecutionSession', () => {
       tool('task-2', 'manage_task', { Action: 'send_input', Input: 'hello\n', TaskId: 'session-new/task-2' }, 'other', 'Run manage_task'),
       tool('task-3', 'manage_task', { Action: 'kill', TaskId: 'session-new/task-2' }, 'other', 'Run manage_task'),
       tool('task-4', 'manage_task', { Action: 'list' }, 'other', 'Run manage_task'),
-      tool('res-1', 'list_resources', { ServerName: 'claudian_sessions' }, 'other', 'Run list_resources'),
+      tool('res-1', 'list_resources', { ServerName: 'copilodian_sessions' }, 'other', 'Run list_resources'),
       tool('sub-1', 'invoke_subagent', { Prompt: 'Review notes.md', Role: 'Notes Reviewer', TypeName: 'self' }, 'other', 'Run invoke_subagent'),
       tool('sub-2', 'send_message', { Message: 'Also check todo.md', Recipient: 'child-1' }, 'other', 'Run send_message'),
       tool('sub-3', 'manage_subagents', { Action: 'list' }, 'other', 'Run manage_subagents'),
@@ -554,7 +554,7 @@ describe('AntigravityExecutionSession', () => {
       expect.objectContaining({ input: expect.objectContaining({ chars: 'hello\n', session_id: 'session-new/task-2' }), name: 'write_stdin', toolCallId: 'task-2' }),
       expect.objectContaining({ input: expect.objectContaining({ TaskId: 'session-new/task-2' }), name: 'KillShell', toolCallId: 'task-3' }),
       expect.objectContaining({ input: expect.objectContaining({ Action: 'list' }), name: 'ManageTasks', toolCallId: 'task-4' }),
-      expect.objectContaining({ input: expect.objectContaining({ server: 'claudian_sessions' }), name: 'ListMcpResources', toolCallId: 'res-1' }),
+      expect.objectContaining({ input: expect.objectContaining({ server: 'copilodian_sessions' }), name: 'ListMcpResources', toolCallId: 'res-1' }),
       expect.objectContaining({ input: expect.objectContaining({ message: 'Review notes.md', target: 'Notes Reviewer' }), name: 'spawn_agent', toolCallId: 'sub-1' }),
       expect.objectContaining({ input: { Message: 'Also check todo.md', Recipient: 'child-1', message: 'Also check todo.md' }, name: 'send_message', toolCallId: 'sub-2' }),
       expect.objectContaining({ input: expect.objectContaining({ Action: 'list' }), name: 'list_agents', toolCallId: 'sub-3' }),
@@ -1310,9 +1310,9 @@ describe('AntigravityExecutionSession', () => {
     await collect(run.events);
 
     const background = backgroundTurn(session);
-    peer.emit({ kind: 'other', name: 'claudian_list_destinations', rawInput: {}, sessionUpdate: 'tool_call', status: 'in_progress', title: 'claudian_list_destinations', toolCallId: 'tool-mcp' }, 'session-new');
+    peer.emit({ kind: 'other', name: 'copilodian_list_destinations', rawInput: {}, sessionUpdate: 'tool_call', status: 'in_progress', title: 'copilodian_list_destinations', toolCallId: 'tool-mcp' }, 'session-new');
     await background.reached('tool_started');
-    await peer.callMCP('session-new', 'claudian_list_destinations', {});
+    await peer.callMCP('session-new', 'copilodian_list_destinations', {});
     expect(list).toHaveBeenCalledTimes(1);
   });
 
@@ -1693,7 +1693,7 @@ describe.skipIf(path.sep === '\\')('Antigravity WSL installations', () => {
     expect([peer.newRequests[0].cwd, peer.resumeRequests[0].cwd]).toEqual(['/mnt/c/vault', '/mnt/c/vault']);
     const [server] = peer.resumeRequests[0].mcpServers;
     if (!('command' in server)) throw new Error('Expected a stdio relay server');
-    expect(server).toMatchObject({ command: '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe', name: 'claudian_sessions' });
+    expect(server).toMatchObject({ command: '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe', name: 'copilodian_sessions' });
     expect(server).not.toHaveProperty('url');
     const routeId = server.env?.find(variable => variable.name === 'CLAUDIAN_SESSION_TOOL_ROUTE')?.value;
     expect(routeId).toBeTruthy();

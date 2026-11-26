@@ -244,7 +244,7 @@ export function resolveRowActions(
     const readAction = readStateAction(input);
     if (readAction) actions.push(readAction);
   }
-  // The ID lets the user point an agent's claudian_send_message at this session.
+  // The ID lets the user point an agent's copilodian_send_message at this session.
   actions.push(action('rename'), action('copy-session-id'));
   if (mode === 'active') {
     actions.push(action('move-to-project'));

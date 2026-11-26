@@ -215,7 +215,7 @@ function buildInputToolbar(
           plugin.settings,
         );
         if (!newProvider) {
-          new Notice('Select an available model in Claudian settings.');
+          new Notice('Select an available model in Copilodian settings.');
           tab.ui.modelSelector.updateDisplay();
           return;
         }

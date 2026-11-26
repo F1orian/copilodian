@@ -265,7 +265,7 @@ it('never republishes a fork token whose publication failed', async () => {
   }
 });
 
-it('appends user plugin rows to the chat presets after Claudian\'s own rows, never to auxiliary presets', async () => {
+it('appends user plugin rows to the chat presets after Copilodian\'s own rows, never to auxiliary presets', async () => {
   const root = await mkdtemp(join(tmpdir(), 'deepseek extra plugins # '));
   const local = join(root, 'local #1.mjs');
   const extra = [
@@ -425,7 +425,7 @@ it.each([['0.2.1', true], ['0.2.2', false]])('keeps ephemeral sessions in proces
       // Children of an ephemeral session (subagents, forks) are ephemeral too.
       const child = await backend.create(header('child', { parentSession: 'claudian-ephemeral-aux', origin: 'subagent' }));
       out.childNative = !!child.native;
-      // Claudian's fork token makes exactly one fork of its parent at its checkpoint ephemeral.
+      // Copilodian's fork token makes exactly one fork of its parent at its checkpoint ephemeral.
       const forks = {};
       for (const [id, parent, inheritedEventCount] of JSON.parse(process.argv[3])) {
         forkIds.push(id);
@@ -466,7 +466,7 @@ it.each([['0.2.1', true], ['0.2.2', false]])('keeps ephemeral sessions in proces
       out.nativeImages = await (await import('node:fs/promises')).readdir(attachments.root);
       out.nativeVariants = await (await import('node:fs/promises')).readdir(attachments.cacheRoot).catch(() => []);
 
-      // Oversized tool output of an ephemeral session stays in Claudian's launch directory, removed with the Host.
+      // Oversized tool output of an ephemeral session stays in Copilodian's launch directory, removed with the Host.
       const spill = name => ({ owner: { sessionId: name }, source: { kind: 'tool', toolName: 'bash' }, suggestedName: '../bash out.txt', content: 'big output ' + name });
       out.auxSpill = await spillStore.saveText(spill('claudian-ephemeral-aux'));
       out.savedSpill = await spillStore.saveText(spill('saved'));
@@ -607,7 +607,7 @@ it.each(['http', 'relay'])('runs the sessions plugin over %s, forwarding caller 
           if (body.routeId || body.token) process.exit(3);
           try {
             const response = await fetch(process.env.CLAUDIAN_SESSION_TOOL_URL, {
-              method: 'POST', headers: { 'Content-Type': 'application/json', 'x-claudian-route': process.env.CLAUDIAN_SESSION_TOOL_ROUTE },
+              method: 'POST', headers: { 'Content-Type': 'application/json', 'x-copilodian-route': process.env.CLAUDIAN_SESSION_TOOL_ROUTE },
               body: line, signal: abort.signal,
             });
             if (!response.ok) process.exit(4);
@@ -657,9 +657,9 @@ it.each(['http', 'relay'])('runs the sessions plugin over %s, forwarding caller 
     expect(output.tools[1].parameters.text.required).not.toBe(true);
     await aborted;
     expect(calls).toEqual([
-      { name: 'claudian_list_destinations', args: {}, callerNativeId: 'child-native' },
-      { name: 'claudian_send_message', args: { sessionId: 'target', text: 'hello' }, callerNativeId: 'child-native' },
-      { name: 'claudian_send_message', args: { text: 'hold' }, callerNativeId: 'child-native' },
+      { name: 'copilodian_list_destinations', args: {}, callerNativeId: 'child-native' },
+      { name: 'copilodian_send_message', args: { sessionId: 'target', text: 'hello' }, callerNativeId: 'child-native' },
+      { name: 'copilodian_send_message', args: { text: 'hold' }, callerNativeId: 'child-native' },
     ]);
   } finally { await endpoint.close(); await replacement.close(); await artifacts.dispose(); }
 });

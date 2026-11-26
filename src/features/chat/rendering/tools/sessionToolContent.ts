@@ -87,7 +87,7 @@ function addBadge(parent: HTMLElement, text: string, modifier: string): void {
 }
 
 // ============================================
-// claudian_list_destinations
+// copilodian_list_destinations
 // ============================================
 
 export function renderListDestinationsContent(container: HTMLElement, tool: ToolSnapshot): void {
@@ -122,7 +122,7 @@ export function renderListDestinationsContent(container: HTMLElement, tool: Tool
 }
 
 // ============================================
-// claudian_send_message
+// copilodian_send_message
 // ============================================
 
 export function renderSendMessageContent(container: HTMLElement, tool: ToolSnapshot): void {
@@ -161,7 +161,7 @@ export function renderSendMessageContent(container: HTMLElement, tool: ToolSnaps
 }
 
 // ============================================
-// claudian_read_session
+// copilodian_read_session
 // ============================================
 
 function parseTurn(value: unknown): number | undefined {

@@ -216,7 +216,7 @@ describe('ClaudianPlugin', () => {
 
   function installVaultFiles(initialFiles: Record<string, string>): Map<string, string> {
     const files = new Map(Object.entries(initialFiles));
-    const folders = new Set<string>(['.claudian']);
+    const folders = new Set<string>(['.copilodian']);
     mockApp.vault.adapter.exists.mockImplementation(async (path: string) => (
       files.has(path) || folders.has(path)
     ));
@@ -261,7 +261,7 @@ describe('ClaudianPlugin', () => {
 
     mockManifest = {
       id: 'claudian',
-      name: 'Claudian',
+      name: 'Copilodian',
       version: '0.1.0', minAppVersion: '1.0.0', author: 'Test', description: '',
     };
 
@@ -388,9 +388,9 @@ describe('ClaudianPlugin', () => {
     });
 
     it.each(['run', 'before-layout', 'before-timer'])('defers obsolete input cleanup until after layout and respects unload: %s', async mode => {
-      const inputPath = '.claudian/sessions/old.inputs.json';
+      const inputPath = '.copilodian/sessions/old.inputs.json';
       const files = installVaultFiles({ [inputPath]: '{}' });
-      await mockApp.vault.adapter.mkdir('.claudian/sessions');
+      await mockApp.vault.adapter.mkdir('.copilodian/sessions');
       mockApp.vault.adapter.list.mockResolvedValue({ files: [inputPath], folders: [] });
       await plugin.onload();
       expect(files.has(inputPath)).toBe(true);
@@ -403,9 +403,9 @@ describe('ClaudianPlugin', () => {
     });
 
     it('joins an admitted input deletion on unload and leaves remaining inputs for the next launch', async () => {
-      const inputs = ['.claudian/sessions/first.inputs.json', '.claudian/sessions/second.inputs.json'];
+      const inputs = ['.copilodian/sessions/first.inputs.json', '.copilodian/sessions/second.inputs.json'];
       const files = installVaultFiles(Object.fromEntries(inputs.map(file => [file, '{}'])));
-      await mockApp.vault.adapter.mkdir('.claudian/sessions');
+      await mockApp.vault.adapter.mkdir('.copilodian/sessions');
       mockApp.vault.adapter.list.mockResolvedValue({ files: inputs, folders: [] });
       let entered!: () => void;
       const deleting = new Promise<void>(resolve => { entered = resolve; });
@@ -435,9 +435,9 @@ describe('ClaudianPlugin', () => {
     });
 
     it('retries a failed deferred input cleanup on the next launch', async () => {
-      const inputPath = '.claudian/sessions/old.inputs.json';
+      const inputPath = '.copilodian/sessions/old.inputs.json';
       const files = installVaultFiles({ [inputPath]: '{}' });
-      await mockApp.vault.adapter.mkdir('.claudian/sessions');
+      await mockApp.vault.adapter.mkdir('.copilodian/sessions');
       mockApp.vault.adapter.list.mockResolvedValue({ files: [inputPath], folders: [] });
       mockApp.vault.adapter.remove.mockRejectedValueOnce(new Error('Storage unavailable'));
       await plugin.onload();
@@ -469,6 +469,23 @@ describe('ClaudianPlugin', () => {
       expect(ProviderSettingsCoordinator.getProviderSettingsSnapshot(plugin.settings, 'codex').permissionMode)
         .toBe('auto-review');
       expect(plugin.settings.hiddenCommands).toEqual(DEFAULT_SETTINGS.hiddenCommands);
+    });
+
+    it('keeps its own vault data and never reads or writes an upstream Claudian folder', async () => {
+      const upstreamSettings = JSON.stringify({ userName: 'Upstream user' });
+      const files = installVaultFiles({ '.claudian/claudian-settings.json': upstreamSettings });
+
+      // A fresh startup persists once, recording the enabled Copilot provider's runtime inputs.
+      await plugin.onload();
+
+      expect(plugin.settings.userName).toBe('');
+      expect(files.get('.claudian/claudian-settings.json')).toBe(upstreamSettings);
+      expect(JSON.parse(files.get('.copilodian/copilodian-settings.json') ?? 'null')).toMatchObject({ userName: '' });
+      const touched = [
+        ...mockApp.vault.adapter.read.mock.calls,
+        ...mockApp.vault.adapter.write.mock.calls,
+      ].map(([path]) => path);
+      expect(touched.filter(path => path.startsWith('.claudian/'))).toEqual([]);
     });
 
     // Note: With multi-tab, agentService is per-tab via TabManager, not on plugin
@@ -765,10 +782,10 @@ describe('ClaudianPlugin', () => {
         resumeAtMessageId: 'deferred-message-id',
       };
       mockApp.vault.adapter.exists.mockImplementation(async (path: string) => (
-        path === '.claudian/claudian-settings.json'
+        path === '.copilodian/copilodian-settings.json'
       ));
       mockApp.vault.adapter.read.mockImplementation(async (path: string) => {
-        if (path === '.claudian/claudian-settings.json') {
+        if (path === '.copilodian/copilodian-settings.json') {
           // Pre-#1024 fingerprint, a scoped session fingerprint and a pending invalidation, all
           // written by earlier versions, beside a moved native store.
           return JSON.stringify({
@@ -934,7 +951,7 @@ describe('ClaudianPlugin', () => {
           } else if (kind === 'last reply') {
             result = await service.readLastReply(id);
           } else if (kind === 'mention') {
-            result = (await resolveSessionMentions(host, `@[session](claudian-session:${id})`, new AbortController().signal)).references[0].id;
+            result = (await resolveSessionMentions(host, `@[session](copilodian-session:${id})`, new AbortController().signal)).references[0].id;
           } else {
             await titles.regenerate(id);
             result = repository.getSummary(id)?.title ?? '';
@@ -1482,15 +1499,15 @@ describe('ClaudianPlugin', () => {
 
       await chatHostOf(plugin).mutateSettings(() => undefined);
 
-      // Claudian-specific settings should be written to .claudian/claudian-settings.json
+      // Claudian-specific settings should be written to .copilodian/claudian-settings.json
       expect(mockApp.vault.adapter.write).toHaveBeenCalledWith(
-        '.claudian/claudian-settings.json',
+        '.copilodian/copilodian-settings.json',
         expect.any(String)
       );
 
       // The written content should include state fields
       const writeCall = mockApp.vault.adapter.write.mock.calls.find(
-        ([path]) => path === '.claudian/claudian-settings.json'
+        ([path]) => path === '.copilodian/copilodian-settings.json'
       );
       expect(writeCall).toBeDefined();
       const content = JSON.parse(writeCall![1]);
@@ -1706,7 +1723,7 @@ describe('ClaudianPlugin', () => {
     });
 
     describe('Codex catalog commits', () => {
-      const settingsPath = '.claudian/claudian-settings.json';
+      const settingsPath = '.copilodian/copilodian-settings.json';
       const discoveredModel = {
         defaultReasoningEffort: 'medium',
         defaultServiceTier: null,
@@ -1918,7 +1935,7 @@ describe('ClaudianPlugin', () => {
 
     it('serializes overlapping environment writes', async () => {
       await plugin.onload();
-      const settingsPath = '.claudian/claudian-settings.json';
+      const settingsPath = '.copilodian/copilodian-settings.json';
       let finishFirstWrite!: () => void;
       const firstWriteRelease = new Promise<void>((resolve) => {
         finishFirstWrite = resolve;
@@ -2061,7 +2078,7 @@ describe('ClaudianPlugin', () => {
 
   describe('applyProviderRuntimeSettings', () => {
     it('persists the runtime fingerprint with runtime settings and keeps bindings across restart', async () => {
-      const settingsPath = '.claudian/claudian-settings.json';
+      const settingsPath = '.copilodian/copilodian-settings.json';
       const deferredMetadata = {
         id: 'runtime-settings-restart-session',
         providerId: 'codex' as const,
@@ -2201,7 +2218,7 @@ describe('ClaudianPlugin', () => {
 
       expect(plugin.addRibbonIcon).toHaveBeenCalledWith(
         'bot',
-        'Open Claudian',
+        'Open Copilodian',
         expect.any(Function),
       );
       const ribbonCallback = (plugin.addRibbonIcon as Mock).mock.calls[0][2];
@@ -2430,7 +2447,7 @@ describe('ClaudianPlugin', () => {
       expect(command.checkCallback(true)).toBe(true);
     });
 
-    it('keeps tab commands unavailable while a Claudian leaf view is not initialized', async () => {
+    it('keeps tab commands unavailable while a Copilodian leaf view is not initialized', async () => {
       await plugin.onload();
 
       mockApp.workspace.getLeavesOfType.mockReturnValue([{ view: {} }]);
@@ -2580,7 +2597,7 @@ describe('ClaudianPlugin', () => {
       expect(result?.id).toBe(conversation.id);
       expect(chatHostOf(plugin).getConversationList()).toHaveLength(1);
       expect(mockApp.vault.adapter.remove).not.toHaveBeenCalledWith(
-        '.claudian/sessions/session-removed-after-startup.meta.json',
+        '.copilodian/sessions/session-removed-after-startup.meta.json',
       );
       availabilitySpy.mockRestore();
     });
@@ -2607,7 +2624,7 @@ describe('ClaudianPlugin', () => {
         previousProviderSessionIds: ['session-from-previous-vault-path'],
       }));
       expect(mockApp.vault.adapter.remove).not.toHaveBeenCalledWith(
-        '.claudian/sessions/session-from-previous-vault-path.meta.json',
+        '.copilodian/sessions/session-from-previous-vault-path.meta.json',
       );
       availabilitySpy.mockRestore();
       loadSpy.mockRestore();
@@ -3249,7 +3266,7 @@ describe('ClaudianPlugin', () => {
     ];
 
     async function loadAllSessions(settings: Record<string, unknown>): Promise<Map<string, string>> {
-      const files = installVaultFiles({ '.claudian/claudian-settings.json': JSON.stringify(settings) });
+      const files = installVaultFiles({ '.copilodian/copilodian-settings.json': JSON.stringify(settings) });
       vi.spyOn(SessionStorage.prototype, 'scan').mockImplementation(async (options) => {
         options?.onBatch?.(deviceMetadataRecords(...sessions));
         return { records: deviceMetadataRecords(...sessions), complete: true, invalidMetadataCount: 0 };
@@ -4154,7 +4171,7 @@ describe('ClaudianPlugin', () => {
       finish();
       await turn;
       expect(mockApp.workspace.trigger).toHaveBeenCalledTimes(1);
-      expect(mockApp.workspace.trigger).toHaveBeenCalledWith('claudian:turn-ended', { sessionId: conversation.id });
+      expect(mockApp.workspace.trigger).toHaveBeenCalledWith('copilodian:turn-ended', { sessionId: conversation.id });
     });
 
     it('publishes session progress and interaction changes as workspace events', async () => {
@@ -4166,9 +4183,9 @@ describe('ClaudianPlugin', () => {
       runtime.signal({ type: 'interaction', interactionId: 'ask', pending: true });
       runtime.signal({ type: 'interaction', interactionId: 'ask', pending: false });
       expect(mockApp.workspace.trigger.mock.calls).toEqual([
-        ['claudian:turn-progress', { sessionId: conversation.id, kind: 'text', messageId: 'm', blockIndex: 0, text: 'Hi' }],
-        ['claudian:interaction-requested', { sessionId: conversation.id, interactionId: 'ask' }],
-        ['claudian:interaction-settled', { sessionId: conversation.id, interactionId: 'ask' }],
+        ['copilodian:turn-progress', { sessionId: conversation.id, kind: 'text', messageId: 'm', blockIndex: 0, text: 'Hi' }],
+        ['copilodian:interaction-requested', { sessionId: conversation.id, interactionId: 'ask' }],
+        ['copilodian:interaction-settled', { sessionId: conversation.id, interactionId: 'ask' }],
       ]);
     });
 

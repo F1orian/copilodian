@@ -1217,7 +1217,7 @@ it('parses cursor history records only once per hydration', async () => {
 it.each([
   { appended: 'continues the saved leaf', parent: 'a1', shows: ['Hello', 'Hi', 'From the CLI', 'CLI reply'], leaf: 'a2' },
   { appended: 'branches from an earlier entry', parent: 'u1', shows: ['Hello', 'Hi'], leaf: 'a1' },
-])('follows entries appended outside Claudian only when the saved leaf $appended', async ({ parent, shows, leaf }) => {
+])('follows entries appended outside Copilodian only when the saved leaf $appended', async ({ parent, shows, leaf }) => {
   const dir = await createTempDirectory('pi-appended-');
   const sessionFile = path.join(dir, 'session.jsonl');
   const entry = (id: string, parentId: string | null, role: 'user' | 'assistant', text: string) => `${JSON.stringify({

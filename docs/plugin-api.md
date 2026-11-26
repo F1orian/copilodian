@@ -1,8 +1,8 @@
 # Plugin API (experimental)
 
-Other Obsidian plugins can list and open Claudian sessions, send prompts to them, stop them, follow their output as it streams, read their replies, and answer their approvals and questions. A voice companion, for example, sends the user's transcript, speaks the reply as it arrives, and reads approvals aloud.
+Other Obsidian plugins can list and open Copilodian sessions, send prompts to them, stop them, follow their output as it streams, read their replies, and answer their approvals and questions. A voice companion, for example, sends the user's transcript, speaks the reply as it arrives, and reads approvals aloud.
 
-The API reports state and events as Claudian has them and makes no decisions for the caller: which streamed blocks to use, which approval options to offer, and how to present them are up to the client.
+The API reports state and events as Copilodian has them and makes no decisions for the caller: which streamed blocks to use, which approval options to offer, and how to present them are up to the client.
 
 The API is experimental: its shape may change in minor releases while `version` is `1`. Check `version` before using it.
 
@@ -18,12 +18,12 @@ import type { App } from 'obsidian';
 const app = this.app as App & {
   plugins: { getPlugin(id: string): { api?: ClaudianAPI } | null };
 };
-const claudian = app.plugins.getPlugin('realclaudian');
-const api = claudian?.api;
-if (api?.version !== 1) return; // Claudian is missing, disabled, still loading, or incompatible
+const copilodian = app.plugins.getPlugin('copilodian');
+const api = copilodian?.api;
+if (api?.version !== 1) return; // Copilodian is missing, disabled, still loading, or incompatible
 ```
 
-Resolve the API when you need it rather than caching it across plugin reloads: disabling or updating Claudian replaces the plugin instance.
+Resolve the API when you need it rather than caching it across plugin reloads: disabling or updating Copilodian replaces the plugin instance.
 
 ## Interface
 
@@ -65,7 +65,7 @@ Returns non-archived sessions, most recently active first. `limit` is an integer
 
 ### `openSession`
 
-Shows the session the way the session list does: in the viewer of the wide layout, or in a tab of the compact layout, reusing the tab that already shows it. When no chat view exists, one opens at the configured placement. `{ focus: true }` also reveals the chat view and focuses its composer. Without it, Claudian does not activate the view itself, but showing a session follows the same path as a click in the session list: a session already open in another tab or view is revealed there, and a pending approval or question takes focus as it does on screen. It rejects when the session does not exist or is archived.
+Shows the session the way the session list does: in the viewer of the wide layout, or in a tab of the compact layout, reusing the tab that already shows it. When no chat view exists, one opens at the configured placement. `{ focus: true }` also reveals the chat view and focuses its composer. Without it, Copilodian does not activate the view itself, but showing a session follows the same path as a click in the session list: a session already open in another tab or view is revealed there, and a pending approval or question takes focus as it does on screen. It rejects when the session does not exist or is archived.
 
 ### `send`
 
@@ -133,7 +133,7 @@ Only the session's main transcript is covered; a side chat's requests are answer
 
 ## Turn-ended event
 
-Claudian fires a workspace event when a session finishes its turn and any work the
+Copilodian fires a workspace event when a session finishes its turn and any work the
 turn left running. This custom event is absent from the SDK's workspace overloads;
 describe it locally and register the returned event reference for unload cleanup:
 
@@ -141,9 +141,9 @@ describe it locally and register the returned event reference for unload cleanup
 import type { EventRef, Workspace } from 'obsidian';
 
 const workspace = this.app.workspace as Workspace & {
-  on(name: 'claudian:turn-ended', callback: (event: { sessionId: string }) => void): EventRef;
+  on(name: 'copilodian:turn-ended', callback: (event: { sessionId: string }) => void): EventRef;
 };
-this.registerEvent(workspace.on('claudian:turn-ended', async ({ sessionId }: { sessionId: string }) => {
+this.registerEvent(workspace.on('copilodian:turn-ended', async ({ sessionId }: { sessionId: string }) => {
   if (sessionId !== mySessionId) return;
   const reply = await api.read(sessionId);
   // speak or display the reply
@@ -154,7 +154,7 @@ The event fires for every session and every turn, whether it was started from th
 
 ## Turn progress event
 
-`claudian:turn-progress` fires for every change to a streamed block, as Claudian receives it, without throttling or filtering:
+`copilodian:turn-progress` fires for every change to a streamed block, as Copilodian receives it, without throttling or filtering:
 
 ```ts
 type TurnProgress =
@@ -164,13 +164,13 @@ type TurnProgress =
 
 - `text` holds everything so far in the block, so a missed event loses nothing. A new block has a new `blockIndex` within the same `messageId`.
 - Notices and errors arrive as text, appended to the open text block as the transcript shows them.
-- A reply the provider produced in the background, outside a turn Claudian started, streams the same way.
-- Text written before a tool call streams too. Claudian does not mark which block is the final answer; `read()` returns it once the turn ends.
+- A reply the provider produced in the background, outside a turn Copilodian started, streams the same way.
+- Text written before a tool call streams too. Copilodian does not mark which block is the final answer; `read()` returns it once the turn ends.
 - Subagent output is not included. Listeners run for every chunk and must stay cheap.
 
 ## Interaction events
 
-`claudian:interaction-requested` fires with `{ sessionId, interactionId }` when an approval or question starts waiting for the user. `claudian:interaction-settled` fires with the same payload when it stops waiting, whether it was answered on screen or through the API, dismissed, or stopped with its turn.
+`copilodian:interaction-requested` fires with `{ sessionId, interactionId }` when an approval or question starts waiting for the user. `copilodian:interaction-settled` fires with the same payload when it stops waiting, whether it was answered on screen or through the API, dismissed, or stopped with its turn.
 
 ## Example: one spoken exchange
 
@@ -178,7 +178,7 @@ type TurnProgress =
 const sessionId = api.getActiveSessionId();
 if (!sessionId) return;
 await api.send(sessionId, { text: transcript });
-// ...the 'claudian:turn-ended' listener reads and speaks the reply.
+// ...the 'copilodian:turn-ended' listener reads and speaks the reply.
 
 // The user talks over the reply:
 await api.send(sessionId, { text: newTranscript, mode: 'interrupt' });

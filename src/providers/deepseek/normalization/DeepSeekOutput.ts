@@ -10,7 +10,7 @@ export type DeepSeekOutputEvent = WithoutEventScope<ProviderBackgroundOutputEven
 
 export class DeepSeekReplayError extends Error {
   constructor() {
-    super('DeepSeek output changed during recovery. Reload Claudian or Obsidian, then reopen this conversation to load the native transcript.');
+    super('DeepSeek output changed during recovery. Reload Copilodian or Obsidian, then reopen this conversation to load the native transcript.');
     this.name = 'DeepSeekReplayError';
   }
 }

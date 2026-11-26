@@ -20,7 +20,7 @@ export const COPILOT_ACP_ARGS = ['--acp', '--stdio'] as const;
  * Copilot applies tool filters to every session its process opens. Listing only a tool that does not exist leaves
  * no tools; Copilot reports the unknown name as an `Info:` notice, which is not shown.
  */
-export const COPILOT_NO_TOOLS_ARGS = ['--available-tools=claudian_no_tools'] as const;
+export const COPILOT_NO_TOOLS_ARGS = ['--available-tools=copilodian_no_tools'] as const;
 
 export interface CopilotNativeConnectionOptions {
   readonly launch: TargetLaunchSpec;

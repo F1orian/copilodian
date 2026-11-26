@@ -12,7 +12,7 @@ vi.mock('node:fs/promises', async () => {
   return createFsPromisesWithWriteFaults();
 });
 
-const retiredPath = '.claude/claudian-settings.json';
+const retiredPath = '.claude/copilodian-settings.json';
 let vault: DesktopVault;
 
 beforeEach(async () => {

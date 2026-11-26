@@ -9,7 +9,7 @@ import {
 
 const { Menu: HostMenu } = await vi.importActual<typeof import('@test/__mocks__/obsidian')>('obsidian');
 
-describe('Claudian file menu', () => {
+describe('Copilodian file menu', () => {
   function createFile(path: string): TFile {
     const file = new TFile();
     file.path = path;
@@ -41,7 +41,7 @@ describe('Claudian file menu', () => {
     (Menu as typeof Menu & { instances: Menu[] }).instances.length = 0;
   });
 
-  it('registers an Add to Claudian item for files', () => {
+  it('registers an Add to Copilodian item for files', () => {
     const { fireFileMenu, host } = createHost();
 
     registerFileMenu(host);
@@ -51,7 +51,7 @@ describe('Claudian file menu', () => {
 
     expect(host.registerEvent).toHaveBeenCalledTimes(1);
     expect((menu).items).toHaveLength(1);
-    expect((menu).items[0].title).toBe('Add to Claudian');
+    expect((menu).items[0].title).toBe('Add to Copilodian');
   });
 
   it('does not add the action for folders', () => {
@@ -65,7 +65,7 @@ describe('Claudian file menu', () => {
     expect((menu).items).toHaveLength(0);
   });
 
-  it('reveals Claudian and appends the vault-relative mention', async () => {
+  it('reveals Copilodian and appends the vault-relative mention', async () => {
     const { appendToActiveInput, host } = createHost();
     const file = createFile('projects/My Plan.md');
 

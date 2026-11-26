@@ -2682,7 +2682,7 @@ describe('CodexExecutionBackend', () => {
     expect(nativeRequest).toHaveBeenCalledWith('thread/resume', expect.objectContaining({
       threadId: 'thread-fork',
       experimentalRawEvents: true,
-      baseInstructions: expect.stringContaining('predates Claudian client-hosted workspace dependency tools'),
+      baseInstructions: expect.stringContaining('predates Copilodian client-hosted workspace dependency tools'),
     }));
 
     const forkedSnapshot = session.getSnapshot();

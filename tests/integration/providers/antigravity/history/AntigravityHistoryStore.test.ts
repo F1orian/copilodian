@@ -189,9 +189,9 @@ describe('loadAntigravityHistory', () => {
           },
           {
             hasDiff: false,
-            input: expect.objectContaining({ server: 'claudian_sessions' }),
+            input: expect.objectContaining({ server: 'copilodian_sessions' }),
             name: 'ListMcpResources',
-            result: 'MCP server claudian_sessions does not have any resources',
+            result: 'MCP server copilodian_sessions does not have any resources',
             status: 'completed',
           },
           { hasDiff: false, input: { query: 'alpha' }, name: 'mcp__notes_server__search_notes', result: '{"hits":1}', status: 'completed' },

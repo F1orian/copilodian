@@ -189,11 +189,11 @@ const LIST_DESTINATIONS_PROPERTIES = {
   },
   project: {
     type: 'boolean',
-    description: 'Return only sessions in the calling session\'s Claudian project, excluding archived ones. Fails when the calling session is not in a project. Defaults to false.',
+    description: 'Return only sessions in the calling session\'s Copilodian project, excluding archived ones. Fails when the calling session is not in a project. Defaults to false.',
   },
   includeProjects: {
     type: 'boolean',
-    description: 'Also return the non-archived Claudian projects a new session can start in. Defaults to false.',
+    description: 'Also return the non-archived Copilodian projects a new session can start in. Defaults to false.',
   },
 } as const satisfies Record<string, SessionToolProperty>;
 
@@ -238,7 +238,7 @@ const SEND_MESSAGE_PROPERTIES = {
   projectId: {
     type: 'string',
     description: [
-      'Claudian project for a new session; its first turn uses that project\'s instructions and memory.',
+      'Copilodian project for a new session; its first turn uses that project\'s instructions and memory.',
       'Only valid when sessionId is omitted; omit to join the calling session\'s project, if any.',
       LIST_PROJECTS_HINT,
     ].join(' '),
@@ -260,7 +260,7 @@ export const SESSION_TOOL_SPECS: readonly SessionToolSpec[] = [
   {
     name: TOOL_CLAUDIAN_LIST_DESTINATIONS,
     description: [
-      `List where ${TOOL_CLAUDIAN_SEND_MESSAGE} can deliver: existing Claudian chat sessions and, on request, options for a new session.`,
+      `List where ${TOOL_CLAUDIAN_SEND_MESSAGE} can deliver: existing Copilodian chat sessions and, on request, options for a new session.`,
       'Returns {sessions, truncated?, providers?}.',
       'sessions is a list of {sessionId, title, provider, status, active, self?}, most recently active first and capped by limit; truncated is true when more exist.',
       'status is "idle", "running", or "awaiting-user"; active marks the session the user is viewing; self: true marks the calling session, which cannot be messaged.',
@@ -273,7 +273,7 @@ export const SESSION_TOOL_SPECS: readonly SessionToolSpec[] = [
   {
     name: TOOL_CLAUDIAN_SEND_MESSAGE,
     description: [
-      'Send a message to another Claudian chat session, or omit sessionId to start a new one.',
+      'Send a message to another Copilodian chat session, or omit sessionId to start a new one.',
       'The message starts a turn in the recipient, or queues until it is free.',
       'Returns {sessionId, title, provider, status} immediately, naming the recipient; it does not wait for the turn or a reply.',
       'status is "started" or "queued" for a delivered message, "steered" when it joined the running turn, "uncertain" when a steer may or may not have arrived (do not resend),',
@@ -291,7 +291,7 @@ export const SESSION_TOOL_SPECS: readonly SessionToolSpec[] = [
   {
     name: TOOL_CLAUDIAN_READ_SESSION,
     description: [
-      'Read another Claudian chat session: each turn\'s user prompt and final reply, without tool calls or thinking.',
+      'Read another Copilodian chat session: each turn\'s user prompt and final reply, without tool calls or thinking.',
       'Use it for a session the user mentions as <context_session id="…">, or to check on a session you messaged.',
       'Returns {sessionId, title, provider, status, content, fromTurn, toTurn, totalTurns}; content is Markdown with turns numbered from 1.',
       'It holds the latest completed turns that fit; a turn still running is left out.',

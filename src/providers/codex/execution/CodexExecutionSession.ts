@@ -375,7 +375,7 @@ export class CodexExecutionSession
         this.#finishError(
           active,
           'configuration',
-          'No Codex model is selected. Enable a model in Claudian settings.',
+          'No Codex model is selected. Enable a model in Copilodian settings.',
           true,
         );
         return;

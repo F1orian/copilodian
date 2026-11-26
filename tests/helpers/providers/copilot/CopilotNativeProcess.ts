@@ -206,7 +206,7 @@ export class CopilotNativeProcess {
 
   /** Exercises the MCP route the client attached to a session. */
   async callMCP(sessionId: string, name: string, args: Record<string, unknown>): Promise<unknown> {
-    const server = this.openMCPServers.get(sessionId)?.find(entry => entry.name === 'claudian_sessions');
+    const server = this.openMCPServers.get(sessionId)?.find(entry => entry.name === 'copilodian_sessions');
     if (!server || !('url' in server)) throw new Error('MCP unavailable');
     const response = await fetch(server.url, {
       method: 'POST',

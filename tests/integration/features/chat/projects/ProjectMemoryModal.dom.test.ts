@@ -21,7 +21,7 @@ import { t } from '@/i18n/i18n';
 
 
 const project: ProjectRecord = {
-  id: 'project-1', name: 'Launch', instructions: '', memoryPath: '.claudian/projects/launch/MEMORY.md',
+  id: 'project-1', name: 'Launch', instructions: '', memoryPath: '.copilodian/projects/launch/MEMORY.md',
   isPinned: false, isArchived: false, createdAt: 1,
 };
 

@@ -328,7 +328,7 @@ export class VaultFileAdapter {
   async #writeFileAtomically(normalized: string, content: string, mode?: number): Promise<void> {
     const target = this.#resolveManagedDesktopPath(this.#basePath(), normalized);
     if (await fs.readFile(target, 'utf8').catch(() => undefined) === content) return;
-    const temp = path.join(path.dirname(target), `.claudian-${randomUUID()}.tmp`);
+    const temp = path.join(path.dirname(target), `.copilodian-${randomUUID()}.tmp`);
     try {
       await fs.writeFile(temp, content, { encoding: 'utf8', flag: 'wx', mode });
       if (mode !== undefined) await fs.chmod(temp, mode);

@@ -136,7 +136,7 @@ export function parseDeepSeekPresetPlugins(text: string, platform: NodeJS.Platfo
     const { id, name } = row as { id?: unknown; name?: unknown };
     if (typeof id !== 'string' || !id.trim()) throw new Error(`Plugin row ${index + 1} needs a non-empty string "id".`);
     if (typeof name !== 'string' || !name.trim()) throw new Error(`Plugin row "${id}" needs a non-empty string "name" (the plugin module).`);
-    if (own.has(id)) throw new Error(`Plugin row "${id}" is already part of Claudian's preset. Choose a different id.`);
+    if (own.has(id)) throw new Error(`Plugin row "${id}" is already part of Copilodian's preset. Choose a different id.`);
     if (seen.has(id)) throw new Error(`Plugin row "${id}" appears more than once.`);
     seen.add(id);
     return row as DeepSeekPresetPlugin;

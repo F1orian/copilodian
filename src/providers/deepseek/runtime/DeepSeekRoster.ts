@@ -118,7 +118,7 @@ export class DeepSeekRoster {
 
   /** The roster alone resolves ancestry; sessions capture request lifetimes before any discovery wait. */
   callSessionTool(request: SessionToolRoutedCallRequest): Promise<SessionToolResult> {
-    const denied: SessionToolResult = { isError: true, text: 'Unbound or ended Claudian session tool caller.' };
+    const denied: SessionToolResult = { isError: true, text: 'Unbound or ended Copilodian session tool caller.' };
     const generation = this.generation;
     const deadline = Date.now() + SESSION_TOOL_DEADLINE_MS;
     const owner = this.ready ? this.owner(request.callerNativeId) : undefined;
@@ -156,7 +156,7 @@ export class DeepSeekRoster {
 
   /** Exclusive claim of a native session within this Host. */
   claim(rootId: string, deliver: Deliver, sessionTools?: DeepSeekSessionToolCapture): () => void {
-    if (this.roots.has(rootId)) throw new Error('This DeepSeek conversation is already open in another Claudian view.');
+    if (this.roots.has(rootId)) throw new Error('This DeepSeek conversation is already open in another Copilodian view.');
     const claim = { deliver, sessionTools };
     this.roots.set(rootId, claim);
     this.changed();

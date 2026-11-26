@@ -268,7 +268,7 @@ export class AntigravityNativeProcess {
 
   /** Exercise the actual MCP route supplied by the client after resume. */
   async callMCP(sessionId: string, name: string, args: Record<string, unknown>): Promise<unknown> {
-    const server = this.readyMCPServers.get(sessionId)?.find(server => server.name === 'claudian_sessions');
+    const server = this.readyMCPServers.get(sessionId)?.find(server => server.name === 'copilodian_sessions');
     if (!server) throw new Error('MCP unavailable before resume');
     return this.#requestMCP(server, 'tools/call', { name, arguments: args });
   }

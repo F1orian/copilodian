@@ -1,20 +1,20 @@
 import { DesktopVault } from '@test/helpers/core/DesktopVault';
 
-const CLAUDIAN_SETTINGS_PATH = '.claudian/claudian-settings.json';
+const CLAUDIAN_SETTINGS_PATH = '.copilodian/copilodian-settings.json';
 let vault: DesktopVault;
 const platform = process.platform;
 let originalSeed: string | null;
 
 beforeEach(async () => {
-  originalSeed = window.localStorage.getItem('claudian.deviceSettingsKey');
-  window.localStorage.setItem('claudian.deviceSettingsKey', 'device:legacy');
+  originalSeed = window.localStorage.getItem('copilodian.deviceSettingsKey');
+  window.localStorage.setItem('copilodian.deviceSettingsKey', 'device:legacy');
   vi.resetModules();
   vault = await DesktopVault.create();
 });
 afterEach(async () => {
   Object.defineProperty(process, 'platform', { value: platform });
-  if (originalSeed === null) window.localStorage.removeItem('claudian.deviceSettingsKey');
-  else window.localStorage.setItem('claudian.deviceSettingsKey', originalSeed);
+  if (originalSeed === null) window.localStorage.removeItem('copilodian.deviceSettingsKey');
+  else window.localStorage.setItem('copilodian.deviceSettingsKey', originalSeed);
   vi.resetModules();
   await vault.dispose();
 });

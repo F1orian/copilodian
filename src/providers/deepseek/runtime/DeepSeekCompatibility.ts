@@ -13,9 +13,9 @@ export const inject = ['systemPrompt', 'tools', 'sessionProjections', 'agents', 
 
 export function apply(ctx, config) {
   if (typeof config?.promptDirectory !== 'string' || !config.promptDirectory) {
-    throw new TypeError('Claudian compatibility requires a prompt directory.');
+    throw new TypeError('Copilodian compatibility requires a prompt directory.');
   }
-  // Claudian writes one prompt per claimed native session. A session without its own (a subagent) runs on its parent's,
+  // Copilodian writes one prompt per claimed native session. A session without its own (a subagent) runs on its parent's,
   // and every session keeps the prompt its current turn started with.
   const own = id => {
     try { return readFileSync(join(config.promptDirectory, createHash('sha256').update(id).digest('hex') + '.txt'), 'utf8'); }
@@ -63,7 +63,7 @@ async function mountListAgents(ctx) {
 
 // Each agent reaches tools directly ('native') or only through run_code programs ('both'). dsh 0.2.1 declares that with
 // tools.presentAs(); 0.2.2 mounts the matching executor plugin in the agent's scope. Auxiliary agents stay direct with
-// their fixed allow list; chat agents follow Claudian's live code-mode preference, read only between turns.
+// their fixed allow list; chat agents follow Copilodian's live code-mode preference, read only between turns.
 async function presentTools(ctx, config) {
   let executors;
   if (typeof ctx.tools.presentAs !== 'function') {
@@ -102,7 +102,7 @@ export const inject = ['tools', 'loader'];
 
 export async function apply(ctx, config) {
   if (typeof config?.endpointFile !== 'string' || !Array.isArray(config.tools)) {
-    throw new TypeError('Claudian sessions requires an endpoint file and tool specs.');
+    throw new TypeError('Copilodian sessions requires an endpoint file and tool specs.');
   }
   const { defineTool } = await ctx.loader.import('@deepseek-ai/dsh-tools');
   for (const spec of config.tools) {
@@ -122,10 +122,10 @@ export async function apply(ctx, config) {
       async execute(args, exec) {
         exec.signal.throwIfAborted();
         const callerNativeId = exec.agent?.id;
-        if (typeof callerNativeId !== 'string' || !callerNativeId) throw new Error('Unbound Claudian session tool caller.');
+        if (typeof callerNativeId !== 'string' || !callerNativeId) throw new Error('Unbound Copilodian session tool caller.');
         // Read on every call: an endpoint replacement never restarts the shared native Host.
         const route = JSON.parse(await readFile(config.endpointFile, 'utf8'));
-        if (typeof route.url !== 'string' || typeof route.routeId !== 'string') throw new Error('Claudian session tools are unavailable.');
+        if (typeof route.url !== 'string' || typeof route.routeId !== 'string') throw new Error('Copilodian session tools are unavailable.');
         const body = { tool: spec.name, args, callerNativeId };
         let result;
         if (process.env.CLAUDIAN_DEEPSEEK_SESSION_RELAY) {
@@ -139,10 +139,10 @@ export async function apply(ctx, config) {
             method: 'POST', headers: { 'Content-Type': 'application/json', [config.routeHeader]: route.routeId },
             body: JSON.stringify(body), signal: exec.signal,
           });
-          if (!response.ok) throw new Error('Claudian session tool endpoint returned HTTP ' + response.status);
+          if (!response.ok) throw new Error('Copilodian session tool endpoint returned HTTP ' + response.status);
           result = await response.json();
         }
-        if (typeof result?.text !== 'string' || typeof result?.isError !== 'boolean') throw new Error('Invalid Claudian session tool result.');
+        if (typeof result?.text !== 'string' || typeof result?.isError !== 'boolean') throw new Error('Invalid Copilodian session tool result.');
         if (result.isError) throw new Error(result.text);
         return result;
       },
@@ -166,7 +166,7 @@ function callRelay(descriptor, body, signal) {
       child.stdin.end();
       if (error) reject(error); else resolve(result);
     };
-    const abort = () => finish(new Error('Claudian session tool cancelled.'));
+    const abort = () => finish(new Error('Copilodian session tool cancelled.'));
     child.on('error', () => finish(new Error('Could not start the WSL session tool relay. Check Windows PowerShell interop.')));
     child.stdin.on('error', () => finish(new Error('WSL session tool relay input closed.')));
     child.on('close', () => finish(new Error('WSL session tool relay exited without a response.')));
@@ -270,7 +270,7 @@ class MemoryEntry {
 
 export function apply(ctx, config) {
   if (!['stateFile', 'readyFile', 'spillRoot', 'attachmentRoot'].every(key => typeof config?.[key] === 'string' && config[key])) {
-    throw new TypeError('Claudian ephemeral sessions require state, readiness, spill and attachment paths.');
+    throw new TypeError('Copilodian ephemeral sessions require state, readiness, spill and attachment paths.');
   }
   const ready = { persistence: false, forkGuard: false, projectionGuard: false, workspaceGuard: false, spillGuard: false, attachmentGuard: false };
   const report = () => {
@@ -286,7 +286,7 @@ export function apply(ctx, config) {
   };
   const memory = new Map();
   const claimed = new Set();
-  // Claudian owns the state file and offers one token per fork; this process only remembers which it claimed.
+  // Copilodian owns the state file and offers one token per fork; this process only remembers which it claimed.
   const claimFork = (parent, inheritedEventCount) => {
     let forks;
     try { forks = JSON.parse(readFileSync(config.stateFile, 'utf8')).forks; } catch { return false; }
@@ -408,7 +408,7 @@ export function apply(ctx, config) {
   // The projection cache keeps one never-pruned record per session, titled with its first user message.
   ctx.inject(['storageDomain', 'sessionProjectionCache'], guardCtx => {
     const domain = guardCtx.storageDomain.get('session_projcache');
-    if (!domain) { guardCtx.logger.warn('Claudian ephemeral sessions: the projection cache is not open.'); return; }
+    if (!domain) { guardCtx.logger.warn('Copilodian ephemeral sessions: the projection cache is not open.'); return; }
     wrap(domain.table('sessions'), 'put', put => function (key, value) {
       return memory.has(key) ? Promise.resolve() : put.call(this, key, value);
     }, guardCtx, 'claudian.ephemeral.projections');
@@ -418,7 +418,7 @@ export function apply(ctx, config) {
   // Native attaches forks to their parent's workspace; no workspace, archive or pin set may account an ephemeral session.
   ctx.inject(['storageDomain', 'workspaceRegistry'], guardCtx => {
     const domain = guardCtx.storageDomain.get('workspace');
-    if (!domain) { guardCtx.logger.warn('Claudian ephemeral sessions: workspaces are not open.'); return; }
+    if (!domain) { guardCtx.logger.warn('Copilodian ephemeral sessions: workspaces are not open.'); return; }
     const without = ids => ids.filter(id => !memory.has(id));
     const record = value => Array.isArray(value?.sessionIds) ? { ...value, sessionIds: without(value.sessionIds) } : value;
     const table = domain.table('workspaces');

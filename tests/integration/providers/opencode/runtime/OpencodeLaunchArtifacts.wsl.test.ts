@@ -27,7 +27,7 @@ describe.skipIf(path.sep === '\\')('WSL launch artifacts', () => {
 
   it('writes database directories on the host and embeds Linux plugin URLs without rewriting user strings', async () => {
     await host.write(host.fromLinux('/home/alice/instructions.txt'), 'User file instructions');
-    await host.write('C:\\Vault\\.claudian\\opencode\\prompts\\old.md', 'retired');
+    await host.write('C:\\Vault\\.copilodian\\opencode\\prompts\\old.md', 'retired');
     const result = await prepareOpencodeLaunchArtifacts({
       target, workspaceRoot: 'C:\\Vault', sessionToolsPluginPath: 'C:\\Temp\\private #1\\session-tools',
       runtimeEnv: { HOME: '/home/alice', OPENCODE_CONFIG_CONTENT: JSON.stringify({
@@ -38,7 +38,7 @@ describe.skipIf(path.sep === '\\')('WSL launch artifacts', () => {
     expect(result.databasePath).toBe('\\\\wsl$\\Ubuntu\\home\\alice\\.local\\share\\opencode\\opencode.db');
     expect(fs.statSync(host.fromLinux('/home/alice/.local/share/opencode')).isDirectory()).toBe(true);
     // Retired per-profile prompt files are removed from the vault's managed storage.
-    expect(fs.existsSync('C:\\Vault\\.claudian\\opencode\\prompts')).toBe(false);
+    expect(fs.existsSync('C:\\Vault\\.copilodian\\opencode\\prompts')).toBe(false);
     const config = JSON.parse(result.configContent);
     expect(config.userText).toBe('C:\\keep');
     expect(config.agent.build.prompt).toBe('User file instructions');

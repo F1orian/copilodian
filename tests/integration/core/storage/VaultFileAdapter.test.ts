@@ -340,15 +340,15 @@ describe('VaultFileAdapter on a desktop vault', () => {
 
     it('leaves a file untouched when its content is unchanged', async () => {
       // Sync clients treat each replacement as delete + create, so an unchanged save must not replace the file.
-      const target = path.join(vaultPath, '.claudian/claudian-settings.json');
-      await files.write('.claudian/claudian-settings.json', '{"a":1}');
+      const target = path.join(vaultPath, '.copilodian/copilodian-settings.json');
+      await files.write('.copilodian/copilodian-settings.json', '{"a":1}');
       const before = await fs.stat(target);
 
-      await files.write('.claudian/claudian-settings.json', '{"a":1}');
-      await files.writeManagedFile('.claudian/claudian-settings.json', '{"a":1}');
+      await files.write('.copilodian/copilodian-settings.json', '{"a":1}');
+      await files.writeManagedFile('.copilodian/copilodian-settings.json', '{"a":1}');
       expect((await fs.stat(target)).ino).toBe(before.ino);
 
-      await files.write('.claudian/claudian-settings.json', '{"a":2}');
+      await files.write('.copilodian/copilodian-settings.json', '{"a":2}');
       expect(await fs.readFile(target, 'utf8')).toBe('{"a":2}');
       expect((await fs.stat(target)).ino).not.toBe(before.ino);
     });

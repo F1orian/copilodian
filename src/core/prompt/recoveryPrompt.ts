@@ -3,9 +3,9 @@ import type { ChatMessage } from '@/core/types';
 import { buildPromptWithHistoryContext } from './historyContext';
 
 /** Envelope for replaying Claudian history into a fresh native session; history parsers strip it. */
-const RECOVERY_HISTORY_PREFIX = '<claudian_recovery_history length="';
+const RECOVERY_HISTORY_PREFIX = '<copilodian_recovery_history length="';
 const RECOVERY_HISTORY_HEADER_SUFFIX = '">\n';
-const RECOVERY_HISTORY_SUFFIX = '\n</claudian_recovery_history>';
+const RECOVERY_HISTORY_SUFFIX = '\n</copilodian_recovery_history>';
 const RECOVERY_INPUT_PREFIX = '\n\nUser: ';
 
 export interface DecodedRecoveryPrompt {

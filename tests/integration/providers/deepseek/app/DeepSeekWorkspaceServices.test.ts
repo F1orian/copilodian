@@ -153,7 +153,7 @@ it('stops the shared Host before a provider transition and restarts it lazily wi
   } finally { await workspace?.dispose?.(); await registry.dispose(); await peer.close(); }
 });
 
-it('mirrors Claudian archive state onto native sessions in this Host store', async () => {
+it('mirrors Copilodian archive state onto native sessions in this Host store', async () => {
   expect(deepseekWorkspaceRegistration.providesSessionArchive).toBe(true);
   const peer = new NativePeer(); await peer.open();
   const { host, lifecycle: registry } = await createProviderHostFixture({

@@ -324,7 +324,7 @@ it('runs the WSL CI fixture locally through real authenticated HTTP/WebSocket an
     const withdraw = await child.offerEphemeralFork('root', 7);
     expect(await child.client.call('fixture/inspect')).toMatchObject({ prompt: 'fixture prompt', presentation: ['root present both'],
       forks: [{ parent: 'root', atSeq: 7 }], spill: 'Linux artifact', attachment: 'Linux artifact' });
-    expect(await child.client.call('fixture/tool', { id: 'one', caller: 'root', tool: 'claudian_list_destinations', input: {} }))
+    expect(await child.client.call('fixture/tool', { id: 'one', caller: 'root', tool: 'copilodian_list_destinations', input: {} }))
       .toEqual({ isError: false, text: 'root' });
     await withdraw(); await child.dispose();
     expect(await readFile(join(root, 'exit.log'), 'utf8')).toBe('owner\n');

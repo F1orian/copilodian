@@ -59,7 +59,7 @@ export class ClaudianSettingTab extends PluginSettingTab {
 
   getSettingDefinitions(): SettingDefinitionItem[] {
     return [{
-      name: 'Claudian',
+      name: 'Copilodian',
       searchable: false,
       render: setting => this.renderSettings(setting.settingEl),
     }];

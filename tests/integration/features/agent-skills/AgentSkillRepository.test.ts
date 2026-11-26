@@ -635,7 +635,7 @@ describe('AgentSkillRepository', () => {
       let rollback: unknown;
       if (outcome === 'write failure') {
         vi.mocked(fs.writeFile).mockImplementation(async (file, data, options) => {
-          if (path.dirname(String(file)) === target && path.basename(String(file)).startsWith('.claudian-')) {
+          if (path.dirname(String(file)) === target && path.basename(String(file)).startsWith('.copilodian-')) {
             spellingAtFailure = await actualFs.readdir(root);
             throw new Error('case repair write failed');
           }

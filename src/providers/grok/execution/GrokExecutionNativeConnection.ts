@@ -94,7 +94,7 @@ implements GrokExecutionNativeConnection {
       // Grok fails open on callback errors, even during cancellation.
       this.unsubscribers.push(this.transport.onRequest(method, () => ({
         decision: 'deny',
-        systemMessage: 'Plan mode is unavailable in Claudian. Continue in normal mode.',
+        systemMessage: 'Plan mode is unavailable in Copilodian. Continue in normal mode.',
       })));
     }
     for (const method of GROK_EXTENSION_NOTIFICATION_METHODS) {

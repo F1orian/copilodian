@@ -202,7 +202,7 @@ export async function runSmoke(options) {
       const result = await Promise.race([building.done, aborted]);
       assert.equal(result.code, 0, 'Build failed; see build.log');
       groups.delete(building.child.pid);
-      const installed = path.join(vault, '.obsidian/plugins/claudian');
+      const installed = path.join(vault, '.obsidian/plugins/copilodian');
       for (const name of ['main.js', 'styles.css', 'manifest.json']) assert.deepEqual(readFileSync(path.join(installed, name)), readFileSync(path.join(checkout, name)), `${name} installed into temp vault`);
     });
     const probeDir = path.join(vault, '.obsidian/plugins/claudian-smoke-probe');

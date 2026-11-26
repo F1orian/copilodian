@@ -107,7 +107,7 @@ for await (const line of lines) {
     case 'get_state': {
       if (process.env.CLAUDIAN_TEST_PI_STARTUP_TOOL === '1' && !startupToolAttempted) {
         startupToolAttempted = true;
-        const tool = tools.get('claudian_send_message');
+        const tool = tools.get('copilodian_send_message');
         write({ type: 'tool_execution_start', toolCallId: 'startup', toolName: tool.name, args: { text: 'Too early' } });
         void tool.execute('startup', { text: 'Too early' }, new AbortController().signal, undefined, extensionContext).then(result => {
           fs.writeFileSync(path.join(root, 'startup-tool.json'), JSON.stringify(result));

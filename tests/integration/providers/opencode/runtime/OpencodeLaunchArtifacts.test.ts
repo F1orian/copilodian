@@ -139,7 +139,7 @@ describe('buildOpencodeManagedConfig', () => {
 describe('prepareOpencodeLaunchArtifacts', () => {
   it('launches without instructions write, reference and keep no prompt', async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), 'claudian-opencode-prompts-'));
-    const legacyPrompts = path.join(root, '.claudian', 'opencode', 'prompts');
+    const legacyPrompts = path.join(root, '.copilodian', 'opencode', 'prompts');
     await fs.mkdir(legacyPrompts, { recursive: true });
     await fs.writeFile(path.join(legacyPrompts, 'main.md'), 'Stale instructions\n');
     try {
@@ -306,7 +306,7 @@ it('accepts native raw environment expressions without copying expanded user con
     });
     expect(JSON.parse(result.configContent)).toMatchObject({ snapshots: false, username: '{env:PROBE_SECOND}' });
     expect(result.configContent).not.toContain('{env:PROBE_SECOND}');
-    await expect(fs.access(path.join(root, '.claudian', 'opencode'))).rejects.toMatchObject({ code: 'ENOENT' });
+    await expect(fs.access(path.join(root, '.copilodian', 'opencode'))).rejects.toMatchObject({ code: 'ENOENT' });
   } finally { await fs.rm(root, { recursive: true, force: true }); }
 });
 

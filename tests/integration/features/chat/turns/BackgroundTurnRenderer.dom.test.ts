@@ -554,7 +554,7 @@ it.each([
   const scope = { kind: 'background' as const, sessionInstanceId: 'native', turnId: 'automatic', sequence: 0 };
   const next = () => ({ ...scope, sequence: ++scope.sequence });
   const inspect = () => {
-    const header = within(messagesEl).queryByRole('button', { name: 'Interrupted · What should Claudian do instead?' });
+    const header = within(messagesEl).queryByRole('button', { name: 'Interrupted · What should Copilodian do instead?' });
     const history = header && document.getElementById(header.getAttribute('aria-controls')!)!;
     const collapsed = visibleTranscript(messagesEl);
     const actions = within(messagesEl).queryAllByRole('button', { name: /^(Copy message|Fork conversation|Worked.*)$/ }).length;
@@ -581,7 +581,7 @@ it.each([
     await Promise.resolve();
     // Replays may describe a never-finished tool differently; the fold, its order and its header must match.
     const foldedBody = expect.stringMatching(/^Read job\.log\b.*Checking the job\.$/);
-    const live = { collapsed: 'Task notification Interrupted · What should Claudian do instead?', actions: 0,
+    const live = { collapsed: 'Task notification Interrupted · What should Copilodian do instead?', actions: 0,
       indicatorInBody: output ? false : null, folded: output ? foldedBody : null };
     expect(inspect()).toEqual(live);
     expect((await axe(messagesEl)).violations).toEqual([]);
@@ -756,7 +756,7 @@ it('keeps a reply before a steer intact and ends the steered input in an indicat
     await session.stop();
     await Promise.resolve();
     const expected = { transcript: ['Task notification', 'Background reply.', 'Make it shorter',
-      'Interrupted · What should Claudian do instead?'], disclosures: 0 };
+      'Interrupted · What should Copilodian do instead?'], disclosures: 0 };
     expect(inspect()).toEqual(expected);
     expect(state.messages.find(message => message.content === 'Background reply.')?.isInterrupt).toBeUndefined();
     renderer.renderMessages(state.messages, () => 'Welcome');
@@ -784,7 +784,7 @@ it('keeps a completed answer intact when the automatic turn after it stops befor
     background.reserve('binding', 'automatic');
     await session.stop();
     await Promise.resolve();
-    const expected = { transcript: ['Do the work', 'Completed answer.', 'Interrupted · What should Claudian do instead?'], interrupted: 0 };
+    const expected = { transcript: ['Do the work', 'Completed answer.', 'Interrupted · What should Copilodian do instead?'], interrupted: 0 };
     expect(inspect()).toEqual(expected);
     renderer.renderMessages(state.messages, () => 'Welcome');
     await Promise.resolve();
@@ -831,7 +831,7 @@ it.each([true, false])('folds a background turn stopped after blank thinking lik
     await background.handle('binding', { type: 'thinking_delta', text: '   ', scope: session.next() }, () => true);
     await session.stop();
     await Promise.resolve();
-    const expected = { transcript: 'Interrupted · What should Claudian do instead?', headers: earlier ? 1 : 0 };
+    const expected = { transcript: 'Interrupted · What should Copilodian do instead?', headers: earlier ? 1 : 0 };
     expect(inspect()).toEqual(expected);
     renderer.renderMessages(state.messages, () => 'Welcome');
     await Promise.resolve();
@@ -854,7 +854,7 @@ it('keeps a notification visible when blank thinking surrounds it in a stopped b
     await blankThinking();
     await session.stop();
     await Promise.resolve();
-    const expected = { transcript: 'Task notification Interrupted · What should Claudian do instead?', headers: 0 };
+    const expected = { transcript: 'Task notification Interrupted · What should Copilodian do instead?', headers: 0 };
     expect(inspect()).toEqual(expected);
     renderer.renderMessages(state.messages, () => 'Welcome');
     await Promise.resolve();
@@ -866,7 +866,7 @@ it('folds a stopped automatic turn across a later notification once, live and on
   const session = (await createBackgroundSession());
   const { messagesEl, renderer, state, background } = session;
   const inspect = () => {
-    const header = within(messagesEl).getByRole('button', { name: 'Interrupted · What should Claudian do instead?' });
+    const header = within(messagesEl).getByRole('button', { name: 'Interrupted · What should Copilodian do instead?' });
     const history = document.getElementById(header.getAttribute('aria-controls')!)!;
     const collapsed = Array.from(messagesEl.querySelectorAll<HTMLElement>('.claudian-message'), visibleText).filter(Boolean).join(' ');
     fireEvent.click(header);
@@ -875,7 +875,7 @@ it('folds a stopped automatic turn across a later notification once, live and on
     return { collapsed, body, headers: within(messagesEl).getAllByRole('button', { name: /^Interrupted/ }).length };
   };
   // Replays may describe the never-finished tool differently; the fold, its order and its header must match.
-  const expected = { collapsed: 'Task notification Interrupted · What should Claudian do instead?',
+  const expected = { collapsed: 'Task notification Interrupted · What should Copilodian do instead?',
     body: expect.stringMatching(/^First part\. Read job\.log\b.*Task notification Second part\.$/), headers: 1 };
   try {
     renderSessionTaskNotification(session.host, 'First job finished.', undefined, session.next());
@@ -947,7 +947,7 @@ it('keeps a completed Pi reply outside a later hidden-trigger interrupted disclo
   try {
     renderer.renderMessages(messages, () => 'Welcome');
     const header = await waitFor(() => within(messagesEl).getByRole('button', {
-      name: 'Interrupted \u00b7 What should Claudian do instead?',
+      name: 'Interrupted \u00b7 What should Copilodian do instead?',
     }));
     const history = document.getElementById(header.getAttribute('aria-controls')!)!;
     expect(history).not.toBeNull();
@@ -1009,7 +1009,7 @@ it('keeps per-notification boundaries of a completed automatic turn, live and on
 it.each([true, false])('folds a notification that trails the stopped reply into its turn, live and on Claude reload (output: %s)', async output => {
   const session = (await createBackgroundSession());
   const { messagesEl, renderer, state, background } = session;
-  const INTERRUPTED = 'Interrupted · What should Claudian do instead?';
+  const INTERRUPTED = 'Interrupted · What should Copilodian do instead?';
   const inspect = () => {
     const header = within(messagesEl).queryByRole('button', { name: INTERRUPTED });
     const visible = Array.from(messagesEl.querySelectorAll<HTMLElement>('.claudian-message'), visibleText).filter(Boolean).join(' ');
@@ -1056,7 +1056,7 @@ it.each([true, false])('folds a notification that trails the stopped reply into 
 it.each([true, false])('folds a stopped automatic turn across compaction once, live and on Claude reload (output after compaction: %s)', async after => {
   const session = (await createBackgroundSession());
   const { messagesEl, renderer, state, background } = session;
-  const INTERRUPTED = 'Interrupted · What should Claudian do instead?';
+  const INTERRUPTED = 'Interrupted · What should Copilodian do instead?';
   const inspect = () => {
     const header = within(messagesEl).getByRole('button', { name: INTERRUPTED });
     const history = document.getElementById(header.getAttribute('aria-controls')!)!;

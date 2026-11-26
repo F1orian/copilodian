@@ -101,10 +101,10 @@ describe('PiHistoryStore', () => {
 
   it('keeps neutral session tool names and native names in replay', () => {
     const messages = parsePiSessionContent(JSON.stringify({ type: 'message', id: 'assistant', message: {
-      role: 'assistant', content: [{ type: 'toolCall', id: 'tool', name: 'claudian_send_message', arguments: { text: 'Hello' } }],
+      role: 'assistant', content: [{ type: 'toolCall', id: 'tool', name: 'copilodian_send_message', arguments: { text: 'Hello' } }],
     } }));
-    expect(messages[0].toolCalls).toEqual([{ id: 'tool', name: 'claudian_send_message', input: { text: 'Hello' },
-      status: 'running', providerPayload: { rawName: 'claudian_send_message' } }]);
+    expect(messages[0].toolCalls).toEqual([{ id: 'tool', name: 'copilodian_send_message', input: { text: 'Hello' },
+      status: 'running', providerPayload: { rawName: 'copilodian_send_message' } }]);
   });
 
   // Pi never runs the calls of a reply that ended in an error or abort; live turns fail them with the reply.

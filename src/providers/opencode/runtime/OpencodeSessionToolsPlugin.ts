@@ -20,10 +20,10 @@ function callRelay(descriptor, payload, signal) {
       child.stdin.end();
       if (error) reject(error); else resolve(result);
     };
-    const abort = () => finish(new Error('Claudian session tool cancelled.'));
+    const abort = () => finish(new Error('Copilodian session tool cancelled.'));
     signal?.addEventListener('abort', abort, { once: true });
-    child.on('error', () => finish(new Error('Claudian session tool relay could not start.')));
-    child.stdin.on('error', () => finish(new Error('Claudian session tool relay input closed.')));
+    child.on('error', () => finish(new Error('Copilodian session tool relay could not start.')));
+    child.stdin.on('error', () => finish(new Error('Copilodian session tool relay input closed.')));
     child.stderr.resume();
     child.stdout.setEncoding('utf8');
     child.stdout.on('data', chunk => {
@@ -31,9 +31,9 @@ function callRelay(descriptor, payload, signal) {
       const end = output.indexOf('\n');
       if (end < 0) return;
       try { finish(undefined, JSON.parse(output.slice(0, end))); }
-      catch { finish(new Error('Invalid Claudian session tool relay response.')); }
+      catch { finish(new Error('Invalid Copilodian session tool relay response.')); }
     });
-    child.on('close', () => finish(new Error('Claudian session tool relay closed without a response.')));
+    child.on('close', () => finish(new Error('Copilodian session tool relay closed without a response.')));
     // EOF cancels the Windows request, so keep stdin open until the response.
     child.stdin.write(JSON.stringify(payload) + '\n');
     if (signal?.aborted) abort();
@@ -65,7 +65,7 @@ export default {
             body: JSON.stringify(payload),
             signal: ctx.signal,
           });
-          if (!response.ok) throw new Error('Claudian session tools unavailable (' + response.status + ').');
+          if (!response.ok) throw new Error('Copilodian session tools unavailable (' + response.status + ').');
           result = await response.json();
           }
           if (result.isError) throw new Error(result.text);

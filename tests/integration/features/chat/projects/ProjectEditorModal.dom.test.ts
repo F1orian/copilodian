@@ -12,7 +12,7 @@ import { t } from '@/i18n/i18n';
 
 const record: ProjectRecord = {
   id: 'project-1', name: 'Launch', instructions: 'Keep the memory current.',
-  memoryPath: '.claudian/projects/launch/MEMORY.md', isPinned: false, isArchived: false, createdAt: 1,
+  memoryPath: '.copilodian/projects/launch/MEMORY.md', isPinned: false, isArchived: false, createdAt: 1,
 };
 
 function host() {
@@ -42,7 +42,7 @@ it('creates a project with long instructions and runs the follow-up once it exis
   createProject(projectHost.ui, { run: afterCreate, failureMessage: 'move failed' });
   const dialog = screen.getByRole('dialog', { name: t('chat.projects.editor.titleNew') });
   expect((await axe(dialog)).violations).toEqual([]);
-  expect(field(dialog, t('chat.projects.editor.memoryPath')).value).toBe('.claudian/projects/project/MEMORY.md');
+  expect(field(dialog, t('chat.projects.editor.memoryPath')).value).toBe('.copilodian/projects/project/MEMORY.md');
 
   fireEvent.click(within(dialog).getByRole('button', { name: t('common.save') }));
   expect(Notice).toHaveBeenCalledWith(t('chat.projects.editor.nameRequired'));
@@ -55,7 +55,7 @@ it('creates a project with long instructions and runs the follow-up once it exis
 
   await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
   expect(projectHost.projects.create).toHaveBeenCalledWith({
-    name: 'Launch', instructions, memoryPath: '.claudian/projects/launch/MEMORY.md',
+    name: 'Launch', instructions, memoryPath: '.copilodian/projects/launch/MEMORY.md',
   });
   await waitFor(() => expect(afterCreate).toHaveBeenCalledWith(expect.objectContaining({ id: 'created' })));
 });
@@ -133,11 +133,11 @@ it('follows the name with the default memory path until the path is edited', asy
   const path = field(dialog, t('chat.projects.editor.memoryPath'));
 
   fireEvent.input(name, { target: { value: 'Alpha' } });
-  expect(path.value).toBe('.claudian/projects/alpha/MEMORY.md');
+  expect(path.value).toBe('.copilodian/projects/alpha/MEMORY.md');
   fireEvent.input(name, { target: { value: 'Alpha Beta!' } });
-  expect(path.value).toBe('.claudian/projects/alpha-beta/MEMORY.md');
+  expect(path.value).toBe('.copilodian/projects/alpha-beta/MEMORY.md');
   fireEvent.input(name, { target: { value: '' } });
-  expect(path.value).toBe('.claudian/projects/project/MEMORY.md');
+  expect(path.value).toBe('.copilodian/projects/project/MEMORY.md');
 
   fireEvent.input(path, { target: { value: 'Work/Alpha.md' } });
   fireEvent.input(name, { target: { value: 'Gamma' } });
@@ -155,12 +155,12 @@ it('offers and saves a portable default memory directory for a reserved project 
 
   fireEvent.input(field(dialog, t('chat.projects.editor.name')), { target: { value: 'CON' } });
   expect(field(dialog, t('chat.projects.editor.memoryPath')).value)
-    .toBe('.claudian/projects/project-con/MEMORY.md');
+    .toBe('.copilodian/projects/project-con/MEMORY.md');
   fireEvent.click(within(dialog).getByRole('button', { name: t('common.save') }));
 
   await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
   expect(projectHost.projects.create).toHaveBeenCalledWith({
-    name: 'CON', instructions: '', memoryPath: '.claudian/projects/project-con/MEMORY.md',
+    name: 'CON', instructions: '', memoryPath: '.copilodian/projects/project-con/MEMORY.md',
   });
 });
 

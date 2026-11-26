@@ -6,7 +6,7 @@ import { parseDocument, stringify } from 'yaml';
 
 export const ANTIGRAVITY_INLINE_EDIT_TOOLS = ['read_file', 'search_web', 'run_command'] as const;
 
-const OWNERSHIP_DESCRIPTION = 'Managed by Claudian. Do not edit.';
+const OWNERSHIP_DESCRIPTION = 'Managed by Copilodian. Do not edit.';
 
 /** Auxiliary sessions only; prepare for session/new: agy stores the persona and tools in the native session. */
 export async function prepareAntigravityAgentFile(
@@ -25,7 +25,7 @@ export async function prepareAntigravityAgentFile(
       if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
     }
     if (existing !== undefined && !isOwnedAgent(existing, name)) {
-      throw new Error('The existing agent file is malformed or is not owned by Claudian.');
+      throw new Error('The existing agent file is malformed or is not owned by Copilodian.');
     }
     const contents = `---\n${stringify({
       name,

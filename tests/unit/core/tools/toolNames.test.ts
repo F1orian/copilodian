@@ -32,14 +32,14 @@ describe('isAgentLifecycleTool', () => {
 });
 
 describe('isSessionTool', () => {
-  it('matches only the Claudian session tools, distinct from runtime agent messaging', () => {
-    expect(TOOL_CLAUDIAN_LIST_DESTINATIONS).toBe('claudian_list_destinations');
-    expect(TOOL_CLAUDIAN_SEND_MESSAGE).toBe('claudian_send_message');
+  it('matches only the Copilodian session tools, distinct from runtime agent messaging', () => {
+    expect(TOOL_CLAUDIAN_LIST_DESTINATIONS).toBe('copilodian_list_destinations');
+    expect(TOOL_CLAUDIAN_SEND_MESSAGE).toBe('copilodian_send_message');
     expect(isSessionTool(TOOL_CLAUDIAN_LIST_DESTINATIONS)).toBe(true);
     expect(isSessionTool(TOOL_CLAUDIAN_SEND_MESSAGE)).toBe(true);
     expect(isSessionTool(TOOL_SEND_MESSAGE)).toBe(false);
     expect(isAgentLifecycleTool(TOOL_CLAUDIAN_SEND_MESSAGE)).toBe(false);
-    expect(isSessionTool('mcp__claudian_sessions__claudian_send_message')).toBe(false);
+    expect(isSessionTool('mcp__copilodian_sessions__copilodian_send_message')).toBe(false);
   });
 });
 

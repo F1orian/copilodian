@@ -708,8 +708,8 @@ it('keeps focus and the caret in a pop-out window the mounted composer moves to'
 });
 
 it.each([
-  ['Draft ] \\ review','@[Draft \\] \\\\ review](claudian-session:conv-1-abc)'],
-  ['Fix `bug`', '@[Fix `bug`](claudian-session:conv-1-abc)'],
+  ['Draft ] \\ review','@[Draft \\] \\\\ review](copilodian-session:conv-1-abc)'],
+  ['Fix `bug`', '@[Fix `bug`](copilodian-session:conv-1-abc)'],
 ])('renders session title %s accessibly and deletes its token', async (title, token) => {
   const parent = document.body.createDiv();
   const editor = createEditor(parent);
@@ -727,15 +727,15 @@ it.each([
 });
 
 it.each([
-  '`@[Review](claudian-session:conv-1-abc)`',
-  '```md\n@[Review](claudian-session:conv-1-abc)\n```',
-  '    @[Review](claudian-session:conv-1-abc)',
-  '\\@[Review](claudian-session:conv-1-abc)',
+  '`@[Review](copilodian-session:conv-1-abc)`',
+  '```md\n@[Review](copilodian-session:conv-1-abc)\n```',
+  '    @[Review](copilodian-session:conv-1-abc)',
+  '\\@[Review](copilodian-session:conv-1-abc)',
 ])('keeps literal session token editable: %s', source => {
   const parent = document.body.createDiv();
   const editor = createEditor(parent);
   try {
-    editor.element.value = `${source}\n\n@[Visible](claudian-session:conv-2-abc)`;
+    editor.element.value = `${source}\n\n@[Visible](copilodian-session:conv-2-abc)`;
     editor.element.focus();
     expect(within(parent).getByRole('img', { name: 'Session: Visible' })).toBeTruthy();
     expect(within(parent).queryByRole('img', { name: 'Session: Review' })).toBeNull();

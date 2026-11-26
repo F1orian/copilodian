@@ -878,7 +878,7 @@ describe('opening a session for another plugin', () => {
     const outside = document.body.createEl('input');
     outside.focus();
     await views.openSession('two', { focus: false });
-    expect(leaf.setViewState).toHaveBeenCalledWith({ type: 'claudian-view', active: false });
+    expect(leaf.setViewState).toHaveBeenCalledWith({ type: 'copilodian-view', active: false });
     expect(manager.getActiveTab()!.conversationId).toBe('two');
     expect(document.activeElement).toBe(outside);
   });

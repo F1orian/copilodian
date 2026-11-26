@@ -43,10 +43,10 @@ describe('DeepSeek additional preset plugins', () => {
     ['a row without a module name', '- id: a\n', /"a".*name/],
     ['duplicate ids', '- { id: a, name: b }\n- { id: a, name: c }\n', /"a".*more than once/],
     // Claudian's own rows (bridge, tool policy and interactive tools Claudian renders) cannot be replaced or shadowed.
-    ['Claudian\'s compatibility bridge', '- { id: claudian-compatibility, name: x }\n', /"claudian-compatibility".*Claudian/],
-    ['Claudian sessions bridge', '- { id: claudian-sessions, name: x }\n', /"claudian-sessions".*Claudian/],
-    ['a built-in tool row', '- { id: tool-fs, name: "@deepseek-ai/dsh-tool-fs" }\n', /"tool-fs".*Claudian/],
-    ['a row nested in Claudian\'s compaction group', '- { id: compaction, name: "cordis:group" }\n', /"compaction".*Claudian/],
+    ['Copilodian\'s compatibility bridge', '- { id: claudian-compatibility, name: x }\n', /"claudian-compatibility".*Copilodian/],
+    ['Copilodian sessions bridge', '- { id: claudian-sessions, name: x }\n', /"claudian-sessions".*Copilodian/],
+    ['a built-in tool row', '- { id: tool-fs, name: "@deepseek-ai/dsh-tool-fs" }\n', /"tool-fs".*Copilodian/],
+    ['a row nested in Copilodian\'s compaction group', '- { id: compaction, name: "cordis:group" }\n', /"compaction".*Copilodian/],
   ])('rejects %s with an actionable message', (_case, text, message) => {
     expect(() => parseDeepSeekPresetPlugins(text)).toThrow(message);
   });
@@ -61,7 +61,7 @@ describe('DeepSeek additional preset plugins', () => {
         const ids = buildDeepSeekPresetPlugins('claudian', paths).map(row => row.id);
         expect(ids).toContain(shell);
         expect(ids).not.toContain(other);
-        expect(() => parseDeepSeekPresetPlugins(`- { id: ${shell}, name: x }\n`)).toThrow(new RegExp(`"${shell}".*Claudian`));
+        expect(() => parseDeepSeekPresetPlugins(`- { id: ${shell}, name: x }\n`)).toThrow(new RegExp(`"${shell}".*Copilodian`));
       } finally { Object.defineProperty(process, 'platform', original); }
     });
 

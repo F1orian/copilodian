@@ -41,9 +41,9 @@ You can also edit the file directly in Obsidian or any editor.
 
 Members are told to use the [cross-session tools](cross-session-messaging.md) within their project:
 
-- `claudian_list_destinations` with `project: true` lists the non-archived sessions in the calling session's project. It fails when the session is not in a project.
-- `claudian_read_session` reads a member, and `claudian_send_message` hands off, delegates or coordinates work. Messages must be self-contained, since the recipient cannot see the sender's conversation.
-- A session started with `claudian_send_message` joins the sender's project, unless the agent passes another project's `projectId`. `claudian_list_destinations` with `includeProjects: true` lists the projects. A session outside any project can start one in a project the same way.
+- `copilodian_list_destinations` with `project: true` lists the non-archived sessions in the calling session's project. It fails when the session is not in a project.
+- `copilodian_read_session` reads a member, and `copilodian_send_message` hands off, delegates or coordinates work. Messages must be self-contained, since the recipient cannot see the sender's conversation.
+- A session started with `copilodian_send_message` joins the sender's project, unless the agent passes another project's `projectId`. `copilodian_list_destinations` with `includeProjects: true` lists the projects. A session outside any project can start one in a project the same way.
 
 On Codex, project listing and choosing a project for a new session need a thread started with the current session tools; older threads lack them.
 
@@ -56,9 +56,9 @@ Create a project with the `+` in the session list's **Projects** header, or with
 | Name | Shown in the session list and in member sessions. Required. |
 | Icon | Click the icon before the name to pick one of Obsidian's icons; search narrows the list. Shown on the project's header in the session list and on the project chip under the composer. Without one, the project shows a folder that opens with its group; a chosen icon stays the same and dims while its group is collapsed. |
 | Instructions | Added to every member's system prompt from its next turn. No length limit. |
-| Memory file | Vault path of the memory file. Defaults to `.claudian/projects/<project-name>/MEMORY.md`, based on the name; a missing `.md` extension is added. The path must be inside the vault and must not already be used by a file or another project. |
+| Memory file | Vault path of the memory file. Defaults to `.copilodian/projects/<project-name>/MEMORY.md`, based on the name; a missing `.md` extension is added. The path must be inside the vault and must not already be used by a file or another project. |
 
-Project records are stored one per project in `.claudian/projects/<id>.json`.
+Project records are stored one per project in `.copilodian/projects/<id>.json`.
 
 ## Adding sessions
 
@@ -94,10 +94,10 @@ Changing the memory file path in the editor moves the file to the new path.
 - The new path must not already hold a file or belong to another project.
 - If the file is missing, the project is only repointed to the new path.
 - If another project still uses the same file, which can happen with records from an earlier version or another synced device, the file is copied to the new path instead of moved. The other project keeps the original, and the two files are edited independently from then on.
-- If saving the project fails, Claudian tries to undo the move, or removes the new copy.
+- If saving the project fails, Copilodian tries to undo the move, or removes the new copy.
 
 ### Deleting a project
 
-Deleting a project removes its record and moves its memory file to the system trash, or to the vault's `.trash` folder when the system trash is unavailable. An empty project folder inside `.claudian/projects/` is removed too. If another project still uses the same memory file, the file is kept.
+Deleting a project removes its record and moves its memory file to the system trash, or to the vault's `.trash` folder when the system trash is unavailable. An empty project folder inside `.copilodian/projects/` is removed too. If another project still uses the same memory file, the file is kept.
 
 The project's sessions are kept and leave the project.

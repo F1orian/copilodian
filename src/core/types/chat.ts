@@ -13,7 +13,7 @@ export type ConversationOriginKind = 'fork' | 'session-tool';
 
 /**
  * The conversation that started this one, written once at creation: a fork records its source, and a session
- * created by `claudian_send_message` records its caller. Absent for sessions the user starts.
+ * created by `copilodian_send_message` records its caller. Absent for sessions the user starts.
  */
 export interface ConversationOrigin {
   readonly kind: ConversationOriginKind;
@@ -21,7 +21,7 @@ export interface ConversationOrigin {
 }
 
 /** View type identifier for Obsidian. */
-export const VIEW_TYPE_CLAUDIAN = 'claudian-view';
+export const VIEW_TYPE_CLAUDIAN = 'copilodian-view';
 
 /** Supported image media types for attachments. */
 export type ImageMediaType = 'image/jpeg' | 'image/png' | 'image/gif' | 'image/webp';

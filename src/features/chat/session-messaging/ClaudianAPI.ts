@@ -10,13 +10,13 @@ import type { SessionSignal } from '@/features/chat/sessions/ChatSessionRuntime'
 import type { ResponseProgress } from '@/features/chat/state/types';
 
 /** Workspace event fired with `ClaudianTurnEndedEvent` when a session finishes its turn and any work it left running. */
-export const CLAUDIAN_TURN_ENDED_EVENT = 'claudian:turn-ended';
+export const CLAUDIAN_TURN_ENDED_EVENT = 'copilodian:turn-ended';
 /** Workspace event fired with `ClaudianTurnProgressEvent` for every streamed block change, as received. */
-export const CLAUDIAN_TURN_PROGRESS_EVENT = 'claudian:turn-progress';
+export const CLAUDIAN_TURN_PROGRESS_EVENT = 'copilodian:turn-progress';
 /** Workspace event fired with `ClaudianInteractionEvent` when an approval or question starts waiting for the user. */
-export const CLAUDIAN_INTERACTION_REQUESTED_EVENT = 'claudian:interaction-requested';
+export const CLAUDIAN_INTERACTION_REQUESTED_EVENT = 'copilodian:interaction-requested';
 /** Workspace event fired with `ClaudianInteractionEvent` when a request stops waiting, however it ended. */
-export const CLAUDIAN_INTERACTION_SETTLED_EVENT = 'claudian:interaction-settled';
+export const CLAUDIAN_INTERACTION_SETTLED_EVENT = 'copilodian:interaction-settled';
 
 export interface ClaudianTurnEndedEvent {
   readonly sessionId: string;
@@ -32,7 +32,7 @@ export interface ClaudianInteractionEvent {
 export type ClaudianPendingInteraction = PendingInteractionSnapshot;
 
 /**
- * Experimental API for other plugins, reached as `app.plugins.getPlugin('realclaudian').api`.
+ * Experimental API for other plugins, reached as `app.plugins.getPlugin('copilodian').api`.
  * Its shape may change in minor releases while `version` is 1.
  */
 export interface ClaudianAPI {

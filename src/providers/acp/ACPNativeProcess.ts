@@ -34,7 +34,7 @@ export class ACPNativeProcess {
     });
     this.client = new ACPClientConnection({
       ...(options.clientCapabilities ? { clientCapabilities: options.clientCapabilities } : {}),
-      clientInfo: { name: 'claudian', version: options.version },
+      clientInfo: { name: 'copilodian', version: options.version },
       delegate: options.delegate,
       transport: this.transport,
     });

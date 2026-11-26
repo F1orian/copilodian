@@ -52,10 +52,10 @@ const server = http.createServer(async (req, res) => {
   let text = ''; for await (const chunk of req) text += chunk;
   const request = JSON.parse(text);
   fs.appendFileSync(process.argv[2], JSON.stringify(request) + '\n');
-  const replied = !request.tools?.some(tool => tool.function?.name === 'claudian_list_destinations') || request.messages?.some(message => message.role === 'tool');
+  const replied = !request.tools?.some(tool => tool.function?.name === 'copilodian_list_destinations') || request.messages?.some(message => message.role === 'tool');
   const chunk = { id: 'fake', object: 'chat.completion.chunk', model: 'fake', choices: [{ index: 0, delta: replied
     ? { content: 'Reply from OpenCode in WSL.' }
-    : { role: 'assistant', tool_calls: [{ index: 0, id: 'call_wsl', type: 'function', function: { name: 'claudian_list_destinations', arguments: '{}' } }] }, finish_reason: replied ? 'stop' : 'tool_calls' }] };
+    : { role: 'assistant', tool_calls: [{ index: 0, id: 'call_wsl', type: 'function', function: { name: 'copilodian_list_destinations', arguments: '{}' } }] }, finish_reason: replied ? 'stop' : 'tool_calls' }] };
   res.writeHead(200, { 'Content-Type': 'text/event-stream' });
   res.end('data: ' + JSON.stringify(chunk) + '\n\ndata: [DONE]\n\n');
 });

@@ -318,7 +318,7 @@ test('preserves subagent history through pending-write release veto, eviction, r
   const gatedWrite: typeof fs.writeFile = async (file, data, options) => {
     const target = String(file);
     const isMetadataWrite = path.dirname(target) === vault.resolve(devicePath)
-      && /^\.claudian-.*\.tmp$/.test(path.basename(target));
+      && /^\.copilodian-.*\.tmp$/.test(path.basename(target));
     if (isMetadataWrite) {
       entered();
       await writeReleased;

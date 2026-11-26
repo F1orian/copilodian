@@ -117,7 +117,7 @@ describe('MentionSource', () => {
     expect(queryAt('meet @3pm')).toBe('3pm');
     expect(queryAt('meet @3pm ')).toBeNull();
     expect(queryAt('meet @3pm tomorrow')).toBeNull();
-    const completed = '@[A \\] B](claudian-session:conv-1-a) summarize this';
+    const completed = '@[A \\] B](copilodian-session:conv-1-a) summarize this';
     expect(value.match(completed, completed.length)).toBeNull();
     expect(value.match(`${completed} @Al`, completed.length + 4)).toEqual(expect.objectContaining({ query: 'Al' }));
     value.destroy();

@@ -100,8 +100,8 @@ function makeInsertLines(n: number): DiffLine[] {
         { type: 'delete', text: '이것은 테스트 문장입니다.', oldLineNum: 3 },
         { type: 'insert', text: '이것은 좋은 테스트 문장입니다.', newLineNum: 3 },
         { type: 'equal', text: '---', oldLineNum: 4, newLineNum: 4 },
-        { type: 'delete', text: '在 Obsidian 中使用 Claudian 插件', oldLineNum: 5 },
-        { type: 'insert', text: '在 Notion 中使用 Claudian 工具', newLineNum: 5 },
+        { type: 'delete', text: '在 Obsidian 中使用 Copilodian 插件', oldLineNum: 5 },
+        { type: 'insert', text: '在 Notion 中使用 Copilodian 工具', newLineNum: 5 },
       ];
 
       renderDiffContent(container, lines);

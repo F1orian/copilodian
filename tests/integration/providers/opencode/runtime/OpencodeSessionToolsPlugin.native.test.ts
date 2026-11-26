@@ -28,10 +28,10 @@ it.skipIf(!cli)('registers session tools and carries the native caller through a
     let body = ''; for await (const chunk of req) body += chunk;
     const request = JSON.parse(body) as FakeLLMRequest;
     requests.push(request);
-    const replied = !request.tools?.some(tool => tool.function?.name === 'claudian_list_destinations') || request.messages?.some(message => message.role === 'tool');
+    const replied = !request.tools?.some(tool => tool.function?.name === 'copilodian_list_destinations') || request.messages?.some(message => message.role === 'tool');
     const chunk = { id: 'fake', object: 'chat.completion.chunk', model: 'fake', choices: [{ index: 0, delta: replied
       ? { content: 'Verified relay result.' }
-      : { role: 'assistant', tool_calls: [{ index: 0, id: 'call_native', type: 'function', function: { name: 'claudian_list_destinations', arguments: '{}' } }] }, finish_reason: replied ? 'stop' : 'tool_calls' }] };
+      : { role: 'assistant', tool_calls: [{ index: 0, id: 'call_native', type: 'function', function: { name: 'copilodian_list_destinations', arguments: '{}' } }] }, finish_reason: replied ? 'stop' : 'tool_calls' }] };
     res.writeHead(200, { 'Content-Type': 'text/event-stream' });
     res.end(`data: ${JSON.stringify(chunk)}\n\ndata: [DONE]\n\n`);
   });
@@ -83,7 +83,7 @@ input.once('line', async line => {
     await kernel.setModel(session.sessionId, 'fake/fake');
     await kernel.prompt(session.sessionId, { text: 'List sessions', files: [], userText: null }, { toolPolicy: { kind: 'provider-default' }, signal: AbortSignal.timeout(25_000), autoApprove: true });
     expect(callers).toEqual([session.sessionId]);
-    expect(requests.flatMap(request => request.tools ?? [])).toEqual(expect.arrayContaining([expect.objectContaining({ function: expect.objectContaining({ name: 'claudian_list_destinations' }) })]));
+    expect(requests.flatMap(request => request.tools ?? [])).toEqual(expect.arrayContaining([expect.objectContaining({ function: expect.objectContaining({ name: 'copilodian_list_destinations' }) })]));
     expect(requests.flatMap(request => request.messages ?? [])).toEqual(expect.arrayContaining([expect.objectContaining({ role: 'tool', content: expect.stringContaining('verified relay 中文') })]));
     expect(outputs).toEqual(expect.arrayContaining([expect.objectContaining({ type: 'tool_completed', isError: false })]));
   } finally {
