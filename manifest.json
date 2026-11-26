@@ -1,7 +1,7 @@
 {
   "id": "copilodian",
   "name": "Copilodian",
-  "version": "2.3.48-copilot.1",
+  "version": "2.3.48-copilot.2",
   "minAppVersion": "1.13.0",
   "description": "Embeds the GitHub Copilot CLI as an AI collaborator in your vault, based on Claudian. Your vault becomes its working directory for file reads and writes, search, bash commands, and multi-step workflows.",
   "author": "F1orian (fork of Claudian by Yishen Tu)",
